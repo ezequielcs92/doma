@@ -1,26 +1,161 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ═══════════════════════════════════════════════════════
+   DOMA SCULPT CENTER — Design System
+   Manual de Marca + Tailwind v4
+   ═══════════════════════════════════════════════════════ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Paleta de Marca */
+  --color-doma-violet: #5E2D89;
+  --color-doma-dark: #390C4C;
+  --color-doma-accent: #00C9AF;
+  --color-doma-light: #EFCFFF;
+  --color-doma-muted: #876b9b;
+  --color-doma-mint: #c3fcf2;
+
+  /* Semánticos */
+  --color-background: #ffffff;
+  --color-foreground: #390C4C;
+  --color-surface: #faf5ff;
+  --color-border: #f0e0f7;
+
+  /* Tipografía */
+  --font-mont: var(--font-mont), "Inter", system-ui, sans-serif;
+
+  /* Radios */
+  --radius-pill: 9999px;
+  --radius-card: 1.5rem;
+  --radius-section: 2.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─────── Base ─────── */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-mont);
+  overflow-x: hidden;
 }
+
+/* ─────── Selection ─────── */
+::selection {
+  background-color: #EFCFFF;
+  color: #390C4C;
+}
+
+/* ─────── Scrollbar (Webkit) ─────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #faf5ff; }
+::-webkit-scrollbar-thumb { background: #876b9b; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #5E2D89; }
+
+/* ─────── Custom Utilities ─────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #00C9AF;
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 30px -8px rgba(0, 201, 175, 0.45);
+  cursor: pointer;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 40px -8px rgba(0, 201, 175, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: #5E2D89;
+  padding: 1rem 2.5rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid #5E2D89;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #5E2D89;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ─────── Glass Card ─────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(239, 207, 255, 0.4);
+  border-radius: 1.5rem;
+}
+
+/* ─────── Gradient Text ─────── */
+.gradient-text {
+  background: linear-gradient(135deg, #5E2D89 0%, #00C9AF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─────── Section Divider ─────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #EFCFFF, transparent);
+}
+
+/* ─────── Animated Gradient Background ─────── */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+
+/* ─────── Float Animation ─────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ─────── Pulse Glow ─────── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 201, 175, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(0, 201, 175, 0.6); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
