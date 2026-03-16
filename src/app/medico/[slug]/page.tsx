@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import DoctorLanding from '@/components/DoctorLanding'
 import { notFound } from 'next/navigation'
 import { Medico } from '@/types/database'
@@ -40,12 +40,25 @@ const fallbackMedicos: Record<string, Medico> = {
 
 // Generación estática para SEO y rendimiento
 export async function generateStaticParams() {
+  if (!isSupabaseConfigured) {
+    return Object.keys(fallbackMedicos).map((slug) => ({ slug }))
+  }
+
   const { data: medicos } = await supabase.from('medicos').select('slug')
-  return medicos?.map((m) => ({ slug: m.slug })) || []
+  const dbSlugs = medicos?.map((m) => ({ slug: m.slug })) || []
+  const fallbackSlugs = Object.keys(fallbackMedicos).map((slug) => ({ slug }))
+
+  return [...dbSlugs, ...fallbackSlugs]
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const { slug } = await params
+
+  if (!isSupabaseConfigured) {
+    const fallback = fallbackMedicos[slug]
+    if (!fallback) notFound()
+    return <DoctorLanding medico={fallback} galeria={[]} />
+  }
 
   // 1. Obtener datos del médico por slug
   const { data: medico, error: medicoError } = await supabase

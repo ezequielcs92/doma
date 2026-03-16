@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 export type BlogPost = {
   id?: string
@@ -80,6 +80,12 @@ function normalizeBlogPost(item: any): BlogPost {
 }
 
 export async function getAllBlogPosts() {
+  if (!isSupabaseConfigured) {
+    return [...fallbackBlogPosts].sort((a, b) =>
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
+  }
+
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -95,6 +101,10 @@ export async function getAllBlogPosts() {
 }
 
 export async function getBlogPostBySlug(slug: string) {
+  if (!isSupabaseConfigured) {
+    return fallbackBlogPosts.find((post) => post.slug === slug)
+  }
+
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
