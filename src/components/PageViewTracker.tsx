@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 const VISITOR_KEY_STORAGE = 'doma_visitor_key'
 
@@ -27,14 +27,22 @@ export default function PageViewTracker() {
   const pathname = usePathname()
 
   useEffect(() => {
-    if (!pathname) return
+    if (!pathname || !isSupabaseConfigured) return
 
     const visitorKey = getVisitorKey()
 
-    void supabase.rpc('track_page_view', {
-      p_path: pathname,
-      p_visitor_key: visitorKey,
-    })
+    void (async () => {
+      try {
+        await supabase.rpc('track_page_view', {
+          p_path: pathname,
+          p_visitor_key: visitorKey,
+        })
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('No se pudo registrar page view en Supabase:', error)
+        }
+      }
+    })()
   }, [pathname])
 
   return null

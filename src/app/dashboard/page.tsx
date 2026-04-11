@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { Lead, Medico } from '@/types/database'
 import { Session } from '@supabase/supabase-js'
 import {
@@ -100,11 +100,22 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function initSession() {
-      const {
-        data: { session: currentSession },
-      } = await supabase.auth.getSession()
-      setSession(currentSession)
-      setAuthLoading(false)
+      if (!isSupabaseConfigured) {
+        setError('Falta configurar Supabase para acceder al dashboard CMS.')
+        setAuthLoading(false)
+        return
+      }
+
+      try {
+        const {
+          data: { session: currentSession },
+        } = await supabase.auth.getSession()
+        setSession(currentSession)
+      } catch {
+        setError('No se pudo conectar con Supabase. Verifica red o DNS e intenta nuevamente.')
+      } finally {
+        setAuthLoading(false)
+      }
     }
 
     initSession()
@@ -122,7 +133,7 @@ export default function DashboardPage() {
   }, [])
 
   useEffect(() => {
-    if (!session || session.user.email !== ADMIN_EMAIL) return
+    if (!isSupabaseConfigured || !session || session.user.email !== ADMIN_EMAIL) return
 
     async function loadCmsData() {
       setCmsLoading(true)
@@ -190,24 +201,46 @@ export default function DashboardPage() {
     e.preventDefault()
     setError(null)
 
-    const { data, error: loginError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    if (!isSupabaseConfigured) {
+      setError('Falta configurar Supabase para iniciar sesion.')
+      return
+    }
 
-    if (loginError) {
-      setError('Credenciales invalidas. Verifica email y contrasena.')
+    let data
+
+    try {
+      const response = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      data = response.data
+
+      if (response.error) {
+        setError('Credenciales invalidas. Verifica email y contrasena.')
+        return
+      }
+    } catch {
+      setError('No se pudo iniciar sesion por un problema de red.')
       return
     }
 
     if (data.user.email !== ADMIN_EMAIL) {
-      await supabase.auth.signOut()
+      try {
+        await supabase.auth.signOut()
+      } catch {
+        // Ignore sign out network issues for unauthorized users.
+      }
       setError('Este usuario no tiene permisos de administrador CMS.')
     }
   }
 
   async function handleLogout() {
-    await supabase.auth.signOut()
+    try {
+      await supabase.auth.signOut()
+    } catch {
+      setError('No se pudo cerrar sesion por un problema de red.')
+    }
     setPosts([])
     setMedicos([])
     setEditingBlogId(null)

@@ -50,10 +50,10 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight"
             >
-              Redefiní tu
+              Resultados naturales,
               <br />
               <span className="relative">
-                <span className="text-doma-accent">mejor versión</span>
+                <span className="text-doma-accent">pensados para vos.</span>
                 <svg
                   className="absolute -bottom-2 left-0 w-full"
                   viewBox="0 0 300 12"
@@ -76,9 +76,8 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.45 }}
               className="text-lg lg:text-xl text-white/70 max-w-lg leading-relaxed"
             >
-              Cirugía estética de alta gama con tecnología de última
-              generación. Resultados naturales respaldados por los mejores
-              profesionales del país.
+              Evaluamos tu caso para lograr el resultado que buscas,
+              con tecnología y seguimiento profesional.
             </motion.p>
 
             <motion.div
@@ -88,7 +87,7 @@ export default function HeroSection() {
               className="flex flex-wrap gap-4 pt-4"
             >
               <a href="/contacto" className="btn-primary group text-base">
-                Agendar Evaluación Gratuita
+                Quiero saber si soy candidato/a
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <a href="/tratamientos" className="btn-secondary !border-white/30 !text-white hover:!bg-white/10 hover:!text-white">

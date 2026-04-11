@@ -7,28 +7,28 @@ import { ArrowRight, Award, GraduationCap } from 'lucide-react'
 
 const doctors = [
   {
-    name: 'Dr. Profesional 1',
-    specialty: 'Cirugía Plástica y Reconstructiva',
-    matricula: 'M.N. 00000',
+    name: 'Dr. Pablo Vega',
+    specialty: 'Cirugía Plástica Estética y Reconstructiva',
+    matricula: 'M.N. 170504',
     image: '/images/team/DOMA_Personal-9.jpg',
     credentials: [
-      'Especialista en Cirugía Plástica',
-      'Miembro de la SACPER',
-      'Formación en técnicas avanzadas de liposucción HD',
+      'Especialista en Cirugía Plástica estética y reconstructiva',
+      'Amplia experiencia en técnicas de cirugía de contorno corporal',
     ],
-    slug: 'doctor-1',
+    slug: 'pablo-vega',
+    cta: 'Conocer al Dr. Vega',
   },
   {
-    name: 'Dr. Profesional 2',
-    specialty: 'Cirugía Estética Corporal',
-    matricula: 'M.N. 00001',
+    name: 'Dra. Majo Arauz',
+    specialty: 'Cirugía Plástica Estética y Reconstructiva',
+    matricula: 'M.N. 174190',
     image: '/images/team/DOMA_Personal-10.jpg',
     credentials: [
-      'Especialista en Definición Corporal',
-      'Fellow en Cirugía Estética Avanzada',
-      'Instructor en técnicas de Body Contouring',
+      'Especialista en Cirugía plástica estética y reconstructiva',
+      'Formación avanzada en Plástica Facial',
     ],
-    slug: 'doctor-2',
+    slug: 'majo-arauz',
+    cta: 'Conocer a la Dra. Arauz',
   },
 ]
 
@@ -121,7 +121,7 @@ export default function TeamSection() {
                       href={`/medico/${doctor.slug}`}
                       className="inline-flex items-center gap-2 text-doma-accent font-bold text-sm pt-4 group/link hover:gap-3 transition-all"
                     >
-                      Ver perfil completo
+                      {doctor.cta || 'Ver perfil completo'}
                       <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                     </a>
                   </div>

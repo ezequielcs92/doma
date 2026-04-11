@@ -17,12 +17,12 @@ export default async function BlogPage() {
               Blog DOMA
             </p>
             <h1 className="mt-5 text-4xl lg:text-6xl font-black text-doma-dark leading-tight">
-              Educacion Estetica
+              Información médica
               <br />
-              <span className="gradient-text">para decidir mejor</span>
+              <span className="gradient-text">para decidir con seguridad</span>
             </h1>
             <p className="mt-5 text-doma-muted max-w-2xl text-lg">
-              Guias y recomendaciones de nuestro equipo medico para ayudarte en cada etapa.
+              Contenido creado por nuestro equipo médico para acompañarte antes, durante y después de cada tratamiento.
             </p>
           </div>
 

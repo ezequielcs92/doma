@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Instagram, Phone, Mail, MapPin } from 'lucide-react'
+import { Instagram, Phone, MapPin, Clock } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -39,7 +39,6 @@ export default function Footer() {
                 { label: 'Equipo Médico', href: '/equipo' },
                 { label: 'Resultados', href: '/resultados' },
                 { label: 'Blog', href: '/blog' },
-                { label: 'Dashboard', href: '/dashboard' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -61,25 +60,22 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-white/60 text-sm">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-doma-accent" />
-                <span>Consultorio médico, Buenos Aires, Argentina</span>
+                <span>AV del Libertador 5990, Belgrano</span>
               </li>
               <li>
                 <a
-                  href="tel:+5491100000000"
+                  href="tel:+5491130253305"
                   className="flex items-center gap-3 text-white/60 hover:text-doma-accent transition-colors text-sm"
                 >
                   <Phone className="w-4 h-4 shrink-0" />
-                  <span>+54 9 11 0000-0000</span>
+                  <span>+54 9 11 3025-3305</span>
                 </a>
               </li>
               <li>
-                <a
-                  href="mailto:info@domasculpt.com"
-                  className="flex items-center gap-3 text-white/60 hover:text-doma-accent transition-colors text-sm"
-                >
-                  <Mail className="w-4 h-4 shrink-0" />
-                  <span>info@domasculpt.com</span>
-                </a>
+                <div className="flex items-center gap-3 text-white/60 text-sm">
+                  <Clock className="w-4 h-4 shrink-0" />
+                  <span>Lunes a viernes de 11:00am a 19:00hs</span>
+                </div>
               </li>
             </ul>
           </div>

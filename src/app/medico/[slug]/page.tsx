@@ -4,37 +4,38 @@ import { notFound } from 'next/navigation'
 import { Medico } from '@/types/database'
 
 const fallbackMedicos: Record<string, Medico> = {
-  'doctor-1': {
-    id: 'doctor-1',
-    nombre: 'Dr. Profesional 1',
-    especialidad: 'Cirugia Plastica y Reconstructiva',
-    matricula: 'M.N. 00000',
+  'pablo-vega': {
+    id: 'pablo-vega',
+    nombre: 'Dr. Pablo Vega',
+    especialidad: 'Cirugía Plástica y Reconstructiva',
+    matricula: 'M.N. 170504',
     foto_url: '/images/team/DOMA_Personal-9.jpg',
     video_url: '',
     curriculum: [
-      'Especialista en Cirugia Plastica',
-      'Miembro de la SACPER',
-      'Formacion en tecnicas avanzadas de liposuccion HD',
+      'Especialista en Cirugía plástica estética y reconstructiva',
+      'Experto en Lipoescultura HD y técnicas avanzadas',
+      'Experiencia en Cirugía corporal de alta precisión',
+      'Procedimientos realizados en sanatorios de alta complejidad',
     ],
     trayectoria:
-      'Profesional con amplia experiencia en procedimientos de contorno corporal y cirugia estetica de alta precision, enfocado en resultados armonicos y naturales.',
-    slug: 'doctor-1',
+      'Especialista en cirugía plástica y contorno corporal avanzado con amplia experiencia en procedimientos de alta precisión. Su enfoque está orientado a lograr resultados naturales, definidos y seguros de cada paciente.',
+    slug: 'pablo-vega',
   },
-  'doctor-2': {
-    id: 'doctor-2',
-    nombre: 'Dr. Profesional 2',
-    especialidad: 'Cirugia Estetica Corporal',
-    matricula: 'M.N. 00001',
+  'majo-arauz': {
+    id: 'majo-arauz',
+    nombre: 'Dra. Majo Arauz',
+    especialidad: 'Cirugía Facial y Medicina Estética',
+    matricula: 'M.N. 174190',
     foto_url: '/images/team/DOMA_Personal-10.jpg',
     video_url: '',
     curriculum: [
-      'Especialista en Definicion Corporal',
-      'Fellow en Cirugia Estetica Avanzada',
-      'Instructor en tecnicas de Body Contouring',
+      'Especialista en rejuvenecimiento facial',
+      'Cirugía facial y medicina estética',
+      'Resultados naturales y armónicos',
     ],
     trayectoria:
-      'Cirujano enfocado en definicion corporal avanzada, con protocolos de recuperacion optimizados y un abordaje personalizado para cada paciente.',
-    slug: 'doctor-2',
+      'Médica especializada en rejuvenecimiento y armonización facial, enfocada en lograr resultados naturales y equilibrados respetando la identidad de cada paciente. Trabaja con técnicas avanzadas tanto quirúrgicas como de medicina estética, priorizando la precisión, la seguridad y un enfoque personalizado.',
+    slug: 'majo-arauz',
   },
 }
 
@@ -44,8 +45,15 @@ export async function generateStaticParams() {
     return Object.keys(fallbackMedicos).map((slug) => ({ slug }))
   }
 
-  const { data: medicos } = await supabase.from('medicos').select('slug')
-  const dbSlugs = medicos?.map((m) => ({ slug: m.slug })) || []
+  let dbSlugs: Array<{ slug: string }> = []
+
+  try {
+    const { data: medicos } = await supabase.from('medicos').select('slug')
+    dbSlugs = medicos?.map((m) => ({ slug: m.slug })) || []
+  } catch {
+    dbSlugs = []
+  }
+
   const fallbackSlugs = Object.keys(fallbackMedicos).map((slug) => ({ slug }))
 
   return [...dbSlugs, ...fallbackSlugs]
@@ -61,11 +69,21 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   // 1. Obtener datos del médico por slug
-  const { data: medico, error: medicoError } = await supabase
-    .from('medicos')
-    .select('*')
-    .eq('slug', slug)
-    .single()
+  let medico: Medico | null = null
+  let medicoError: unknown = null
+
+  try {
+    const response = await supabase
+      .from('medicos')
+      .select('*')
+      .eq('slug', slug)
+      .single()
+
+    medico = (response.data as Medico | null) || null
+    medicoError = response.error
+  } catch (error) {
+    medicoError = error
+  }
 
   const medicoFinal = !medicoError && medico ? medico : fallbackMedicos[slug]
 
@@ -74,10 +92,18 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   // 2. Obtener galería de resultados para este médico
-  const { data: galeria } = await supabase
-    .from('antes_despues')
-    .select('*')
-    .eq('medico_id', medicoFinal.id)
+  let galeria: any[] = []
 
-  return <DoctorLanding medico={medicoFinal} galeria={galeria || []} />
+  try {
+    const { data } = await supabase
+      .from('antes_despues')
+      .select('*')
+      .eq('medico_id', medicoFinal.id)
+
+    galeria = data || []
+  } catch {
+    galeria = []
+  }
+
+  return <DoctorLanding medico={medicoFinal} galeria={galeria} />
 }

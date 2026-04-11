@@ -85,8 +85,8 @@ export default function ContactSection() {
                 {
                   icon: Phone,
                   label: 'Teléfono',
-                  value: '+54 9 11 0000-0000',
-                  href: 'tel:+5491100000000',
+                  value: '+54 9 11 3025-3305',
+                  href: 'tel:+5491130253305',
                 },
                 {
                   icon: Mail,
@@ -97,13 +97,13 @@ export default function ContactSection() {
                 {
                   icon: MapPin,
                   label: 'Dirección',
-                  value: 'Consultorio médico, Buenos Aires',
+                  value: 'AV del Libertador 5990, Belgrano',
                   href: '#',
                 },
                 {
                   icon: Clock,
                   label: 'Horarios',
-                  value: 'Lun-Vie 9:00 - 19:00',
+                  value: 'Lunes a viernes de 11:00am a 19:00hs',
                   href: '#',
                 },
               ].map((item, i) => (
@@ -206,13 +206,15 @@ export default function ContactSection() {
                     className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark"
                   >
                     <option value="">Seleccioná una opción</option>
-                    <option value="liposuccion">Liposucción HD</option>
+                    <option value="lipoescultura-hd">Lipoescultura HD</option>
                     <option value="abdominoplastia">Abdominoplastia</option>
-                    <option value="definicion360">Definición Corporal 360°</option>
-                    <option value="rellenos">Rellenos y Bioestimulación</option>
-                    <option value="blefaroplastia">Blefaroplastia</option>
-                    <option value="facial">Tratamientos Faciales</option>
-                    <option value="otro">Otro / No sé aún</option>
+                    <option value="body-lifting">Body Lifting</option>
+                    <option value="cirugia-mamaria">Cirugía Mamaria</option>
+                    <option value="cirugia-glutea">Cirugía Glútea</option>
+                    <option value="cirugia-facial">Cirugía Facial</option>
+                    <option value="medicina-estetica">Medicina Estética</option>
+                    <option value="mommy-makeover">Mommy Makeover</option>
+                    <option value="asesoramiento">Quiero asesoramiento</option>
                   </select>
                 </div>
 

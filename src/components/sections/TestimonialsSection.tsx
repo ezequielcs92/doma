@@ -23,14 +23,14 @@ const testimonials = [
   },
   {
     name: 'Ana G.',
-    procedure: 'Definición Corporal 360°',
+    procedure: 'Body Lifting',
     rating: 5,
     text: 'Lo que más destaco es la honestidad del equipo. Me explicaron exactamente qué esperar y cumplieron. El seguimiento post-operatorio fue impecable.',
     date: 'Hace 2 meses',
   },
   {
     name: 'Laura M.',
-    procedure: 'Rellenos Faciales',
+    procedure: 'Medicina Estética',
     rating: 5,
     text: 'Un resultado super natural, justo lo que quería. Se nota que los doctores tienen un ojo estético increíble. Las instalaciones son de primer nivel.',
     date: 'Hace 1 mes',

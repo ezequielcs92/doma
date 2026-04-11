@@ -9,50 +9,65 @@ import { cn } from '@/lib/utils'
 const treatments = [
   {
     icon: Scissors,
-    title: 'Liposucción HD',
+    title: 'Lipoescultura HD',
     description:
-      'Definición corporal de alta precisión con tecnología de ultrasonido. Resultados naturales y tiempo de recuperación reducido.',
-    features: ['Tecnología VASER', 'Resultados inmediatos', 'Mínimamente invasivo'],
-    image: '/images/team/DOMA_Personal-3.jpg',
+      'Definición corporal de alta precisión que permite resaltar la musculatura y mejorar el contorno corporal de forma natural. Utilizamos varias tecnologías logrando resultados más definidos y una recuperación más rápida.',
+    features: ['Mayor definición muscular', 'Recuperación más rápida', 'Resultados naturales'],
+    cta: 'Consultar con el especialista',
+    image: '/images/treatments/ImplanteGluteo-4.03-2.jpg',
   },
   {
     icon: Sparkles,
     title: 'Abdominoplastia',
     description:
-      'Cirugía abdominal para lograr un contorno firme y estilizado. Técnicas avanzadas de mínima cicatriz.',
-    features: ['Técnica mini-abdominoplastia', 'Recuperación asistida', 'Resultados duraderos'],
-    image: '/images/team/DOMA_Personal-4.jpg',
+      'Cirugía que permite eliminar el exceso de piel y grasa abdominal, logrando un abdomen más firme, plano y definido. Ideal para pacientes con flacidez, diástasis o cambios post embarazo.',
+    features: ['Técnicas avanzadas', 'Resultados duraderos', 'Definición corporal 360'],
+    cta: 'Quiero mi evaluación',
+    image: '/images/treatments/ImplanteGluteo-4.03-3.jpg',
   },
   {
     icon: Activity,
-    title: 'Definición Corporal 360°',
+    title: 'Body Lifting',
     description:
-      'Tratamiento integral que combina múltiples técnicas para lograr una silueta armónica y proporcionada.',
-    features: ['Plan personalizado', 'Múltiples zonas', 'Enfoque integral'],
-    image: '/images/team/DOMA_Personal-5.jpg',
+      'Cirugía integral que permite redefinir el contorno corporal trabajando múltiples zonas en una misma intervención, logrando una silueta más estilizada, armónica y natural. Ideal para pacientes que buscan un cambio corporal completo.',
+    features: ['Combinación de técnicas', 'Mayor definición corporal', 'Resultados armónicos'],
+    cta: 'Consultar con el especialista',
+    image: '/images/treatments/ImplanteGluteo-4.03-4.jpg',
   },
   {
     icon: Syringe,
-    title: 'Rellenos y Bioestimulación',
+    title: 'Cirugía Mamaria',
     description:
-      'Medicina estética avanzada con ácido hialurónico y bioestimuladores de colágeno para rejuvenecimiento facial.',
-    features: ['Ácido hialurónico', 'Bioestimuladores', 'Sin cirugía'],
-    image: '/images/team/DOMA_Personal-6.jpg',
-  },
-  {
-    icon: Eye,
-    title: 'Blefaroplastia',
-    description:
-      'Cirugía de párpados para una mirada rejuvenecida y descansada. Procedimiento ambulatorio con recuperación rápida.',
-    features: ['Ambulatorio', 'Anestesia local', 'Resultado natural'],
-    image: '/images/team/DOMA_Personal-7.jpg',
+      'Procedimientos diseñados para mejorar la forma, el tamaño, volumen y armonía de las mamas, adaptados a las características y objetivos de cada paciente.',
+    features: ['Aumento mamario', 'Mastopexia', 'Recambio de implantes'],
+    cta: 'Quiero mi evaluación',
+    image: '/images/treatments/ImplanteGluteo-4.03-5.jpg',
   },
   {
     icon: Droplets,
-    title: 'Tratamientos Faciales',
+    title: 'Cirugía Glútea',
     description:
-      'Protocolos de medicina estética facial para lograr luminosidad, hidratación y un aspecto rejuvenecido.',
-    features: ['Plasma rico en plaquetas', 'Skinbooster', 'Hilos tensores'],
+      'Procedimientos diseñados para mejorar la forma, proyección y volumen de los glúteos, logrando un contorno más armónico y natural.',
+    features: ['Implantes glúteos', 'Transferencia glútea', 'Resultados naturales'],
+    cta: 'Quiero mi evaluación',
+    image: '/images/treatments/ImplanteGluteo-4.03.jpg',
+  },
+  {
+    icon: Eye,
+    title: 'Cirugía Facial',
+    description:
+      'Procedimientos diseñados para rejuvenecer y armonizar el rostro, mejorando la apariencia sin perder naturalidad.',
+    features: ['Blefaroplastia', 'Lifting facial', 'Lifting de cejas'],
+    cta: 'Quiero mi evaluación',
+    image: '/images/team/DOMA_Personal-7.jpg',
+  },
+  {
+    icon: Sparkles,
+    title: 'Medicina Estética',
+    description:
+      'Tratamientos no quirúrgicos diseñados para mejorar la calidad de la piel, prevenir el envejecimiento y realzar la armonía facial de forma natural.',
+    features: ['Ácido hialurónico', 'Toxina botulínica', 'Skinboosters', 'Bioestimuladores'],
+    cta: 'Quiero mi evaluación',
     image: '/images/team/DOMA_Personal-8.jpg',
   },
 ]
@@ -86,16 +101,16 @@ export default function TreatmentsSection() {
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <p className="text-white/50 max-w-2xl mx-auto text-lg">
-              Cada tratamiento es diseñado a medida. Combinamos tecnología
-              avanzada con la experiencia de nuestros profesionales para
-              resultados excepcionales.
+              Diseñamos cada tratamiento de forma personalizada, combinando
+              tecnología de última generación con la experiencia de nuestro
+              equipo médico para lograr resultados naturales y armónicos.
             </p>
           </AnimatedSection>
         </div>
 
         {/* Treatment Selector - Desktop */}
         <AnimatedSection delay={0.3}>
-          <div className="hidden lg:grid grid-cols-6 gap-2 mb-12">
+          <div className="hidden lg:grid grid-cols-7 gap-2 mb-12">
             {treatments.map((t, i) => (
               <button
                 key={i}
@@ -145,7 +160,7 @@ export default function TreatmentsSection() {
                   href="#contacto"
                   className="btn-primary self-start mt-4 group"
                 >
-                  Consultar por este tratamiento
+                  {active.cta || 'Consultar por este tratamiento'}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>

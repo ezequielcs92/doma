@@ -8,21 +8,21 @@ import { Heart, Microscope, Users } from 'lucide-react'
 const values = [
   {
     icon: Microscope,
-    title: 'Tecnología Avanzada',
+    title: 'Tecnología que mejora tus resultados',
     description:
-      'Equipamiento de última generación para procedimientos seguros con resultados predecibles y naturales.',
+      'Utilizamos equipamiento avanzado para lograr mejor precisión, mejor definición y una recuperación más controlada.',
   },
   {
     icon: Heart,
-    title: 'Atención Personalizada',
+    title: 'Evaluación médica real',
     description:
-      'Cada paciente recibe un plan diseñado exclusivamente para sus necesidades y objetivos estéticos.',
+      'Analizamos tu caso en detalle para definir si necesitás cirugía o un tratamiento y cuál es la mejor opción para vos.',
   },
   {
     icon: Users,
-    title: 'Equipo de Excelencia',
+    title: 'Experiencia en resultados reales',
     description:
-      'Profesionales certificados con formación internacional y miles de procedimientos exitosos.',
+      'Equipo con formación en cirugía y medicina estética.',
   },
 ]
 
@@ -78,10 +78,9 @@ export default function AboutSection() {
 
             <AnimatedSection delay={0.2}>
               <p className="text-lg text-doma-muted leading-relaxed">
-                En DOMA Sculpt Center, fusionamos la precisión médica
-                con la visión estética más exigente. Nuestro objetivo es
-                brindarte resultados naturales que potencien tu confianza,
-                en un entorno seguro y de primer nivel.
+                Evaluamos tu caso y definimos el mejor camino para lograr
+                el resultado que buscás, con un enfoque médico, tecnología
+                avanzada y seguimiento personalizado.
               </p>
             </AnimatedSection>
 

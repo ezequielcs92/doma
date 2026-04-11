@@ -4,6 +4,18 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog'
 
+function renderBoldText(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g)
+
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index} className="font-bold text-doma-dark">{part.slice(2, -2)}</strong>
+    }
+
+    return <span key={index}>{part}</span>
+  })
+}
+
 export async function generateStaticParams() {
   const posts = await getAllBlogPosts()
   return posts.map((post) => ({ slug: post.slug }))
@@ -43,14 +55,71 @@ export default async function BlogPostPage({
           </div>
 
           <div className="space-y-6">
-            {post.content.map((paragraph, index) => (
-              <p
-                key={index}
-                className="text-doma-muted text-lg leading-relaxed"
-              >
-                {paragraph}
-              </p>
-            ))}
+            {post.content.map((line, index) => {
+              // H2 headers
+              if (line.startsWith('## ')) {
+                return (
+                  <h2
+                    key={index}
+                    className="text-3xl font-black text-doma-dark leading-tight mt-10 mb-4"
+                  >
+                    {line.slice(3)}
+                  </h2>
+                )
+              }
+              // H3 headers
+              if (line.startsWith('### ')) {
+                return (
+                  <h3
+                    key={index}
+                    className="text-xl font-extrabold text-doma-dark leading-tight mt-8 mb-3"
+                  >
+                    {line.slice(4)}
+                  </h3>
+                )
+              }
+              // List items
+              if (line.startsWith('- ')) {
+                return (
+                  <div key={index} className="flex items-start gap-3 pl-4">
+                    <span className="w-1.5 h-1.5 rounded-full bg-doma-accent mt-2.5 shrink-0" />
+                    <span className="text-doma-muted text-lg leading-relaxed">
+                      {line.slice(2)}
+                    </span>
+                  </div>
+                )
+              }
+              // Checkmark items
+              if (line.startsWith('✔️')) {
+                return (
+                  <div key={index} className="flex items-start gap-3 pl-4">
+                    <span className="text-doma-accent mt-0.5 shrink-0">✔️</span>
+                    <span className="text-doma-muted text-lg leading-relaxed">
+                      {renderBoldText(line.slice(2).trim())}
+                    </span>
+                  </div>
+                )
+              }
+              // Regular paragraphs
+              return (
+                <p
+                  key={index}
+                  className="text-doma-muted text-lg leading-relaxed"
+                >
+                  {renderBoldText(line)}
+                </p>
+              )
+            })}
+          </div>
+
+          {/* CTA */}
+          <div className="mt-16 p-8 rounded-3xl bg-doma-light/20 border border-doma-light/40 text-center">
+            <p className="text-doma-dark font-bold text-lg mb-4">
+              ¿Querés una evaluación personalizada?
+            </p>
+            <a href="/contacto" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-doma-accent text-white font-bold text-sm hover:bg-doma-accent/90 transition-colors">
+              Agendar consulta
+            </a>
           </div>
         </article>
       </main>

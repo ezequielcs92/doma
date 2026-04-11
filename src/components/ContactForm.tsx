@@ -5,7 +5,7 @@ import { Lead } from '@/types/database'
 import { supabase } from '@/lib/supabase'
 import { CheckCircle2, Loader2, ArrowRight } from 'lucide-react'
 
-export default function ContactForm({ medicoId }: { medicoId: string }) {
+export default function ContactForm({ medicoId, formTitle, formSubtitle }: { medicoId: string; formTitle?: string; formSubtitle?: string }) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -51,8 +51,8 @@ export default function ContactForm({ medicoId }: { medicoId: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-10 rounded-3xl shadow-2xl shadow-doma-violet/5 border border-doma-light/30 space-y-5">
-      <h3 className="text-2xl font-black text-doma-dark mb-2 text-center">Agendá tu evaluación</h3>
-      <p className="text-sm text-doma-muted text-center mb-4">Sin cargo y sin compromiso</p>
+      <h3 className="text-2xl font-black text-doma-dark mb-2 text-center">{formTitle || 'Agenda tu evaluación personalizada'}</h3>
+      <p className="text-sm text-doma-muted text-center mb-4">{formSubtitle || 'Evaluación médica personalizada según tu caso.'}</p>
 
       <div>
         <label className="block text-sm font-bold mb-2 text-doma-dark">Nombre Completo</label>
@@ -96,12 +96,14 @@ export default function ContactForm({ medicoId }: { medicoId: string }) {
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark"
         >
           <option value="">Selecciona una opcion</option>
-          <option value="Liposuccion HD">Liposuccion HD</option>
+          <option value="Lipoescultura HD">Lipoescultura HD</option>
           <option value="Abdominoplastia">Abdominoplastia</option>
-          <option value="Definicion Corporal 360">Definicion Corporal 360</option>
-          <option value="Rinoplastia">Rinoplastia</option>
-          <option value="Blefaroplastia">Blefaroplastia</option>
-          <option value="Medicina Estetica Facial">Medicina Estetica Facial</option>
+          <option value="Body Lifting">Body Lifting</option>
+          <option value="Cirugia Mamaria">Cirugía Mamaria</option>
+          <option value="Cirugia Glutea">Cirugía Glútea</option>
+          <option value="Cirugia Facial">Cirugía Facial</option>
+          <option value="Medicina Estetica">Medicina Estética</option>
+          <option value="Mommy Makeover">Mommy Makeover</option>
           <option value="Quiero asesoramiento">Quiero asesoramiento</option>
         </select>
       </div>
