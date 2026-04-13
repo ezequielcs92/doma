@@ -225,7 +225,14 @@ export default function DashboardPage() {
       return
     }
 
-    if (data.user.email !== ADMIN_EMAIL) {
+    const userEmail = data?.user?.email
+
+    if (!userEmail) {
+      setError('No se pudo validar el usuario autenticado. Intenta nuevamente.')
+      return
+    }
+
+    if (userEmail !== ADMIN_EMAIL) {
       try {
         await supabase.auth.signOut()
       } catch {
