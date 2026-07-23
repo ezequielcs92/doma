@@ -2,7 +2,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { getAllBlogPosts } from '@/lib/blog'
+import { formatBlogDate, getAllBlogPosts } from '@/lib/blog'
+
+export const revalidate = 60
 
 export default async function BlogPage() {
   const posts = await getAllBlogPosts()
@@ -52,7 +54,7 @@ export default async function BlogPage() {
                   </p>
                   <div className="flex items-center justify-between text-xs text-doma-muted/80 mb-5">
                     <span>{post.author}</span>
-                    <span>{new Date(post.date).toLocaleDateString('es-AR')}</span>
+                    <span>{formatBlogDate(post.date)}</span>
                   </div>
                   <Link
                     href={`/blog/${post.slug}`}

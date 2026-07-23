@@ -103,9 +103,9 @@ export default function HeroSection() {
               className="flex flex-wrap gap-6 pt-6"
             >
               {[
-                { icon: Shield, text: 'Clínica Habilitada' },
-                { icon: Award, text: 'Profesionales Certificados' },
-                { icon: Star, text: '+1000 Procedimientos' },
+                { icon: Shield, text: 'Evaluación médica personalizada' },
+                { icon: Award, text: 'Seguimiento profesional' },
+                { icon: Star, text: 'Tecnología aplicada' },
               ].map((badge, i) => (
                 <div
                   key={i}
@@ -128,12 +128,12 @@ export default function HeroSection() {
             <div className="relative">
               {/* Stats Card */}
               <div className="glass-card p-8 space-y-6 animate-float bg-doma-dark/80 backdrop-blur-xl border-white/25 shadow-2xl shadow-doma-dark/40">
-                <h3 className="text-white font-extrabold text-2xl leading-none">¿Por qué DOMA?</h3>
+                <h3 className="text-white font-extrabold text-2xl leading-none">Nuestro enfoque</h3>
                 <div className="space-y-4">
                   {[
-                    { value: '98%', label: 'Satisfacción de pacientes' },
-                    { value: '+1000', label: 'Procedimientos realizados' },
-                    { value: '15+', label: 'Años de experiencia combinada' },
+                    { value: '01', label: 'Evaluación detallada' },
+                    { value: '02', label: 'Plan personalizado' },
+                    { value: '03', label: 'Seguimiento continuo' },
                   ].map((stat, i) => (
                     <div
                       key={i}

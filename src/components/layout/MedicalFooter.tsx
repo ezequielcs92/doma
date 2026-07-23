@@ -1,4 +1,5 @@
-import { Instagram, Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock } from 'lucide-react'
+import Link from 'next/link'
 
 export default function MedicalFooter() {
   return (
@@ -21,7 +22,7 @@ export default function MedicalFooter() {
             </h4>
             <div className="flex items-start gap-3 text-sm text-doma-muted">
               <MapPin className="w-4 h-4 mt-0.5 text-doma-accent" />
-              <span>Consultorio medico, Buenos Aires, Argentina</span>
+              <span>Av. del Libertador 5990, Belgrano</span>
             </div>
           </div>
 
@@ -30,9 +31,9 @@ export default function MedicalFooter() {
               Contacto
             </h4>
             <div className="space-y-3 text-sm">
-              <a href="tel:+5491100000000" className="flex items-center gap-3 text-doma-muted hover:text-doma-violet transition-colors">
+              <a href="tel:+5491130253305" className="flex items-center gap-3 text-doma-muted hover:text-doma-violet transition-colors">
                 <Phone className="w-4 h-4 text-doma-accent" />
-                <span>+54 9 11 0000-0000</span>
+                <span>+54 9 11 3025-3305</span>
               </a>
               <a href="mailto:info@domasculpt.com" className="flex items-center gap-3 text-doma-muted hover:text-doma-violet transition-colors">
                 <Mail className="w-4 h-4 text-doma-accent" />
@@ -40,7 +41,7 @@ export default function MedicalFooter() {
               </a>
               <div className="flex items-center gap-3 text-doma-muted">
                 <Clock className="w-4 h-4 text-doma-accent" />
-                <span>Lun-Vie 9:00 a 19:00</span>
+                <span>Lun-Vie 11:00 a 19:00</span>
               </div>
             </div>
           </div>
@@ -49,21 +50,17 @@ export default function MedicalFooter() {
             <h4 className="text-sm font-black uppercase tracking-widest text-doma-violet mb-4">
               Redes
             </h4>
-            <a
-              href="#"
-              aria-label="Instagram"
-              className="inline-flex items-center justify-center w-11 h-11 rounded-xl border border-doma-light bg-surface text-doma-violet hover:bg-doma-violet hover:text-white transition-colors"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
+            <p className="text-sm leading-relaxed text-doma-muted">
+              Consultas y turnos por los canales de contacto publicados.
+            </p>
           </div>
         </div>
 
         <div className="mt-10 pt-6 border-t border-doma-light/50 flex flex-col md:flex-row gap-3 justify-between text-xs text-doma-muted">
           <p>© {new Date().getFullYear()} DOMA Sculpt Center. Todos los derechos reservados.</p>
           <div className="flex gap-5">
-            <a href="#" className="hover:text-doma-violet transition-colors">Politica de Privacidad</a>
-            <a href="#" className="hover:text-doma-violet transition-colors">Terminos y Condiciones</a>
+            <Link href="/privacidad" className="hover:text-doma-violet transition-colors">Política de Privacidad</Link>
+            <Link href="/terminos" className="hover:text-doma-violet transition-colors">Términos y Condiciones</Link>
           </div>
         </div>
       </div>

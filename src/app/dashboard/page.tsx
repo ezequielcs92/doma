@@ -39,6 +39,22 @@ type NavigationMetric = {
   unique_users: number | null
 }
 
+function normalizeCmsBlogPost(item: Record<string, unknown>): CmsBlogPost {
+  return {
+    id: typeof item.id === 'string' ? item.id : undefined,
+    slug: String(item.slug || ''),
+    title: String(item.title || ''),
+    excerpt: String(item.excerpt || ''),
+    cover: String(item.cover || '/images/team/DOMA.jpg'),
+    date: String(item.date || new Date().toISOString().slice(0, 10)),
+    author: String(item.author || 'Equipo DOMA'),
+    category: String(item.category || 'Guia'),
+    content: Array.isArray(item.content)
+      ? item.content.map(String).join('\n\n')
+      : String(item.content || ''),
+  }
+}
+
 const ADMIN_EMAIL = 'admin@doma.com'
 
 const emptyBlogForm: CmsBlogPost = {
@@ -57,7 +73,7 @@ const emptyMedicoForm = {
   nombre: '',
   especialidad: '',
   matricula: '',
-  foto_url: '/images/team/DOMA_Personal-9.jpg',
+  foto_url: '/images/team/pablo-vega.webp',
   video_url: '',
   slug: '',
   trayectoria: '',
@@ -154,19 +170,7 @@ export default function DashboardPage() {
         if (medicosResponse.error) throw medicosResponse.error
         if (leadsResponse.error) throw leadsResponse.error
 
-        const normalizedPosts: CmsBlogPost[] = (postsResponse.data || []).map((item: any) => ({
-          id: item.id,
-          slug: item.slug || '',
-          title: item.title || '',
-          excerpt: item.excerpt || '',
-          cover: item.cover || '/images/team/DOMA.jpg',
-          date: item.date || new Date().toISOString().slice(0, 10),
-          author: item.author || 'Equipo DOMA',
-          category: item.category || 'Guia',
-          content: Array.isArray(item.content)
-            ? item.content.join('\n\n')
-            : (item.content as string) || '',
-        }))
+        const normalizedPosts = (postsResponse.data || []).map(normalizeCmsBlogPost)
 
         setPosts(normalizedPosts)
         setMedicos((medicosResponse.data || []) as Medico[])
@@ -181,9 +185,10 @@ export default function DashboardPage() {
           setNavigationWarning(null)
           setNavigationMetrics((navigationResponse.data || []) as NavigationMetric[])
         }
-      } catch (e: any) {
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : String(e)
         const maybeBlogTableMissing =
-          String(e?.message || '').toLowerCase().includes('blog_posts')
+          message.toLowerCase().includes('blog_posts')
         setError(
           maybeBlogTableMissing
             ? 'No se encontro la tabla blog_posts en Supabase. Creala para gestionar articulos desde el CMS.'
@@ -308,19 +313,7 @@ export default function DashboardPage() {
       .order('date', { ascending: false })
 
     if (!reloadError) {
-      const normalized: CmsBlogPost[] = (data || []).map((item: any) => ({
-        id: item.id,
-        slug: item.slug || '',
-        title: item.title || '',
-        excerpt: item.excerpt || '',
-        cover: item.cover || '/images/team/DOMA.jpg',
-        date: item.date || new Date().toISOString().slice(0, 10),
-        author: item.author || 'Equipo DOMA',
-        category: item.category || 'Guia',
-        content: Array.isArray(item.content)
-          ? item.content.join('\n\n')
-          : (item.content as string) || '',
-      }))
+      const normalized = (data || []).map(normalizeCmsBlogPost)
       setPosts(normalized)
     }
   }

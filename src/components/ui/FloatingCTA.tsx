@@ -24,7 +24,7 @@ export default function FloatingCTA() {
     >
       {/* WhatsApp / Call */}
       <a
-        href="tel:+5491100000000"
+        href="tel:+5491130253305"
         className="w-14 h-14 rounded-full bg-doma-violet text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
         aria-label="Llamar"
       >

@@ -17,16 +17,32 @@ const navLinks = [
   { label: 'Contacto', href: '/contacto' },
 ]
 
-export default function Navbar() {
+function NavbarContent({ pathname }: { pathname: string }) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    if (!mobileOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileOpen(false)
+    }
+
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [mobileOpen])
 
   const useSolidStyle = scrolled || pathname !== '/'
 
@@ -85,7 +101,9 @@ export default function Navbar() {
                 'lg:hidden p-2 rounded-xl transition-colors',
                 useSolidStyle ? 'text-doma-dark' : 'text-white'
               )}
-              aria-label="Menú"
+              aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -94,37 +112,41 @@ export default function Navbar() {
       </header>
 
       {/* Mobile Menu Overlay */}
-      <div
-        className={cn(
-          'fixed inset-0 z-40 bg-white transition-all duration-500 lg:hidden flex flex-col',
-          mobileOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
-        )}
-      >
-        <div className="pt-24 px-8 flex-1 flex flex-col gap-2">
-          {navLinks.map((link, i) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className="text-2xl font-bold text-doma-dark py-4 border-b border-doma-light/40 hover:text-doma-violet transition-colors"
-              style={{ animationDelay: `${i * 50}ms` }}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <div className="mt-8">
-            <Link
-              href="/contacto"
-              onClick={() => setMobileOpen(false)}
-              className="btn-primary w-full text-center"
-            >
-              Agendar Consulta
-            </Link>
+      {mobileOpen && (
+        <nav
+          id="mobile-navigation"
+          aria-label="Navegación móvil"
+          className="fixed inset-0 z-40 flex flex-col bg-white lg:hidden"
+        >
+          <div className="pt-24 px-8 flex-1 flex flex-col gap-2">
+            {navLinks.map((link, i) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="text-2xl font-bold text-doma-dark py-4 border-b border-doma-light/40 hover:text-doma-violet transition-colors"
+                style={{ animationDelay: `${i * 50}ms` }}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="mt-8">
+              <Link
+                href="/contacto"
+                onClick={() => setMobileOpen(false)}
+                className="btn-primary w-full text-center"
+              >
+                Agendar Consulta
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
+        </nav>
+      )}
     </>
   )
+}
+
+export default function Navbar() {
+  const pathname = usePathname()
+  return <NavbarContent key={pathname} pathname={pathname} />
 }

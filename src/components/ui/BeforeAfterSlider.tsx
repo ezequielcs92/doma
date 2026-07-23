@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 
 interface BeforeAfterSliderProps {
@@ -11,52 +11,18 @@ interface BeforeAfterSliderProps {
 
 export default function BeforeAfterSlider({ before, after, alt = 'Resultado' }: BeforeAfterSliderProps) {
   const [position, setPosition] = useState(50)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const isDragging = useRef(false)
-
-  const handleMove = useCallback((clientX: number) => {
-    if (!containerRef.current) return
-    const rect = containerRef.current.getBoundingClientRect()
-    const x = clientX - rect.left
-    const percent = Math.max(0, Math.min(100, (x / rect.width) * 100))
-    setPosition(percent)
-  }, [])
-
-  const handleMouseDown = () => {
-    isDragging.current = true
-  }
-
-  const handleMouseUp = () => {
-    isDragging.current = false
-  }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current) return
-    handleMove(e.clientX)
-  }
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    handleMove(e.touches[0].clientX)
-  }
 
   return (
     <div
-      ref={containerRef}
       className="relative aspect-[4/3] rounded-2xl overflow-hidden cursor-col-resize select-none"
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleMouseUp}
     >
       {/* After image (full width, behind) */}
       <Image src={after} alt={`${alt} - Después`} fill className="object-cover" />
 
       {/* Before image (clipped) */}
       <div
-        className="absolute inset-0 overflow-hidden"
-        style={{ width: `${position}%` }}
+        className="absolute inset-0"
+        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
         <Image
           src={before}
@@ -66,9 +32,19 @@ export default function BeforeAfterSlider({ before, after, alt = 'Resultado' }: 
         />
       </div>
 
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value={position}
+        onChange={(event) => setPosition(Number(event.target.value))}
+        aria-label={`Comparar antes y después: ${alt}`}
+        className="absolute inset-0 z-30 w-full h-full opacity-0 cursor-col-resize"
+      />
+
       {/* Slider line */}
       <div
-        className="absolute top-0 bottom-0 w-[3px] bg-white shadow-lg z-10"
+        className="absolute top-0 bottom-0 w-[3px] bg-white shadow-lg z-10 pointer-events-none"
         style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
       >
         {/* Handle */}

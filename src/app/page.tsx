@@ -9,6 +9,8 @@ import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import ContactSection from '@/components/sections/ContactSection'
 import CTABanner from '@/components/sections/CTABanner'
 
+export const revalidate = 60
+
 export default function Home() {
   return (
     <>

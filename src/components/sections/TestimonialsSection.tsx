@@ -8,32 +8,22 @@ import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
 
 const testimonials = [
   {
-    name: 'María L.',
-    procedure: 'Liposucción HD',
+    name: 'Noelia R.',
+    procedure: 'Cirugía facial',
     rating: 5,
-    text: 'Desde la primera consulta me sentí en confianza. El resultado superó mis expectativas. El equipo de DOMA es increíble, profesionales en todo sentido.',
-    date: 'Hace 3 meses',
+    text: 'Su dedicación y profesionalismo son admirables. La recomiendo ampliamente. Es muy competente y atenta. Gracias Dra. Majo.',
   },
   {
-    name: 'Carolina P.',
-    procedure: 'Abdominoplastia',
+    name: 'Jahaira C.',
+    procedure: 'Medicina estética',
     rating: 5,
-    text: 'Llevaba años postergando la decisión y fue la mejor decisión que tomé. La recuperación fue mucho mejor de lo que esperaba y el resultado es hermoso.',
-    date: 'Hace 5 meses',
+    text: 'Muy feliz con los resultados, eres una genia. Me encanta siempre acudir con vos, los resultados son hermosos siempre, re naturales. Muchas gracias.',
   },
   {
-    name: 'Ana G.',
-    procedure: 'Body Lifting',
+    name: 'Verónica G.',
+    procedure: 'Cirugía facial',
     rating: 5,
-    text: 'Lo que más destaco es la honestidad del equipo. Me explicaron exactamente qué esperar y cumplieron. El seguimiento post-operatorio fue impecable.',
-    date: 'Hace 2 meses',
-  },
-  {
-    name: 'Laura M.',
-    procedure: 'Medicina Estética',
-    rating: 5,
-    text: 'Un resultado super natural, justo lo que quería. Se nota que los doctores tienen un ojo estético increíble. Las instalaciones son de primer nivel.',
-    date: 'Hace 1 mes',
+    text: 'El acompañamiento de la Dra. Majo es excelente, de altísima calidad humana. Realizó una cirugía impecable y estuvo presente en cada duda, consulta y necesidad durante el proceso. Gracias Majito, sos de excelencia.',
   },
 ]
 

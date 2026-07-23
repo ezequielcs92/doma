@@ -4,6 +4,8 @@ import TeamSection from '@/components/sections/TeamSection'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import CTABanner from '@/components/sections/CTABanner'
 
+export const revalidate = 60
+
 export default function EquipoPage() {
   return (
     <>

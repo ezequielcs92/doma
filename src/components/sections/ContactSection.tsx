@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import SectionLabel from '@/components/ui/SectionLabel'
+import Turnstile from '@/components/Turnstile'
 import {
   CheckCircle2,
   Loader2,
@@ -18,6 +19,7 @@ export default function ContactSection() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileVersion, setTurnstileVersion] = useState(0)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -25,22 +27,44 @@ export default function ContactSection() {
     setError(null)
 
     const formData = new FormData(e.currentTarget)
+    const turnstileToken = String(formData.get('cf-turnstile-response') ?? '')
     const data = {
-      nombre: formData.get('nombre') as string,
-      email: formData.get('email') as string,
-      telefono: formData.get('telefono') as string,
-      mensaje: formData.get('mensaje') as string,
+      nombre: String(formData.get('nombre') ?? ''),
+      email: String(formData.get('email') ?? ''),
+      telefono: String(formData.get('telefono') ?? ''),
+      mensaje: String(formData.get('mensaje') ?? ''),
+      procedimiento: String(formData.get('procedimiento') ?? ''),
       medico_id: 'web-general',
+      website: String(formData.get('website') ?? ''),
+      privacyAccepted: formData.get('privacyAccepted') === 'on',
+      ...(turnstileToken ? { 'cf-turnstile-response': turnstileToken } : {}),
     }
 
     try {
-      const { error: insertError } = await supabase
-        .from('leads')
-        .insert([data])
-      if (insertError) throw insertError
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      const result: unknown = await response.json().catch(() => null)
+      if (!response.ok) {
+        const message =
+          typeof result === 'object' &&
+          result !== null &&
+          'error' in result &&
+          typeof result.error === 'string'
+            ? result.error
+            : 'Hubo un error al enviar tu consulta. Por favor intenta de nuevo.'
+        throw new Error(message)
+      }
       setSuccess(true)
-    } catch {
-      setError('Hubo un error al enviar tu consulta. Por favor intenta de nuevo.')
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : 'Hubo un error al enviar tu consulta. Por favor intenta de nuevo.'
+      )
+      setTurnstileVersion((version) => version + 1)
     } finally {
       setLoading(false)
     }
@@ -98,13 +122,13 @@ export default function ContactSection() {
                   icon: MapPin,
                   label: 'Dirección',
                   value: 'AV del Libertador 5990, Belgrano',
-                  href: '#',
+                  href: 'https://www.google.com/maps/search/?api=1&query=Av.+del+Libertador+5990,+Belgrano,+Buenos+Aires',
                 },
                 {
                   icon: Clock,
                   label: 'Horarios',
                   value: 'Lunes a viernes de 11:00am a 19:00hs',
-                  href: '#',
+                  href: undefined,
                 },
               ].map((item, i) => (
                 <a
@@ -130,9 +154,8 @@ export default function ContactSection() {
             {/* Trust note */}
             <div className="p-6 rounded-2xl bg-doma-light/20 border border-doma-light/40">
               <p className="text-xs text-doma-muted leading-relaxed">
-                🔒 Tus datos están protegidos. No compartimos tu información
-                con terceros. Tu consulta es 100% confidencial y sin
-                compromiso.
+                Tus datos se utilizan para responder tu consulta y coordinar
+                una evaluación, según nuestra política de privacidad.
               </p>
             </div>
           </AnimatedSection>
@@ -155,16 +178,19 @@ export default function ContactSection() {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="bg-white p-10 rounded-3xl shadow-2xl shadow-doma-violet/5 border border-doma-light/30 space-y-6"
+                className="relative bg-white p-10 rounded-3xl shadow-2xl shadow-doma-violet/5 border border-doma-light/30 space-y-6"
               >
                 <div>
-                  <label className="block text-sm font-bold mb-2 text-doma-dark">
+                  <label htmlFor="general-nombre" className="block text-sm font-bold mb-2 text-doma-dark">
                     Nombre Completo
                   </label>
                   <input
+                    id="general-nombre"
                     name="nombre"
                     required
                     type="text"
+                    autoComplete="name"
+                    maxLength={100}
                     placeholder="Tu nombre completo"
                     className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400"
                   />
@@ -172,25 +198,31 @@ export default function ContactSection() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-bold mb-2 text-doma-dark">
+                    <label htmlFor="general-email" className="block text-sm font-bold mb-2 text-doma-dark">
                       Email
                     </label>
                     <input
+                      id="general-email"
                       name="email"
                       required
                       type="email"
+                      autoComplete="email"
+                      maxLength={254}
                       placeholder="tu@email.com"
                       className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold mb-2 text-doma-dark">
+                    <label htmlFor="general-telefono" className="block text-sm font-bold mb-2 text-doma-dark">
                       Teléfono
                     </label>
                     <input
+                      id="general-telefono"
                       name="telefono"
                       required
                       type="tel"
+                      autoComplete="tel"
+                      maxLength={30}
                       placeholder="+54 9 11 ..."
                       className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400"
                     />
@@ -198,11 +230,13 @@ export default function ContactSection() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2 text-doma-dark">
+                  <label htmlFor="general-procedimiento" className="block text-sm font-bold mb-2 text-doma-dark">
                     ¿Qué procedimiento te interesa?
                   </label>
                   <select
+                    id="general-procedimiento"
                     name="procedimiento"
+                    required
                     className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark"
                   >
                     <option value="">Seleccioná una opción</option>
@@ -219,20 +253,29 @@ export default function ContactSection() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold mb-2 text-doma-dark">
+                  <label htmlFor="general-mensaje" className="block text-sm font-bold mb-2 text-doma-dark">
                     Tu Consulta
                   </label>
                   <textarea
+                    id="general-mensaje"
                     name="mensaje"
                     required
                     rows={4}
+                    maxLength={2000}
                     placeholder="Contanos qué te gustaría mejorar o cualquier duda que tengas..."
                     className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400 resize-none"
                   ></textarea>
                 </div>
 
+                <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                  <label htmlFor="general-website">Sitio web</label>
+                  <input id="general-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+                </div>
+
+                <Turnstile key={turnstileVersion} />
+
                 {error && (
-                  <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
+                  <div role="alert" aria-live="polite" className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
                     {error}
                   </div>
                 )}
@@ -252,10 +295,21 @@ export default function ContactSection() {
                   )}
                 </button>
 
-                <p className="text-[11px] text-gray-400 text-center leading-relaxed">
-                  Al enviar, aceptás nuestras políticas de privacidad y el
-                  tratamiento confidencial de tus datos.
-                </p>
+                <label className="flex items-start gap-3 text-xs leading-relaxed text-gray-500">
+                  <input
+                    name="privacyAccepted"
+                    type="checkbox"
+                    required
+                    className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-doma-violet"
+                  />
+                  <span>
+                    Acepto la{' '}
+                    <Link href="/privacidad" className="font-bold text-doma-violet underline">
+                      política de privacidad
+                    </Link>{' '}
+                    y el uso de mis datos para responder esta consulta.
+                  </span>
+                </label>
               </form>
             )}
           </AnimatedSection>

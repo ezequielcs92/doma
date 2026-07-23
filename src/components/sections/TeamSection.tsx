@@ -1,16 +1,26 @@
-'use client'
-
 import Image from 'next/image'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import SectionLabel from '@/components/ui/SectionLabel'
 import { ArrowRight, Award, GraduationCap } from 'lucide-react'
+import { isSupabaseConfigured, supabase } from '@/lib/supabase'
+import { Medico } from '@/types/database'
 
-const doctors = [
+type TeamDoctor = {
+  name: string
+  specialty: string
+  matricula: string
+  image: string
+  credentials: string[]
+  slug: string
+  cta?: string
+}
+
+const fallbackDoctors: TeamDoctor[] = [
   {
     name: 'Dr. Pablo Vega',
     specialty: 'Cirugía Plástica Estética y Reconstructiva',
     matricula: 'M.N. 170504',
-    image: '/images/team/DOMA_Personal-9.jpg',
+    image: '/images/team/pablo-vega.webp',
     credentials: [
       'Especialista en Cirugía Plástica estética y reconstructiva',
       'Amplia experiencia en técnicas de cirugía de contorno corporal',
@@ -22,7 +32,7 @@ const doctors = [
     name: 'Dra. Majo Arauz',
     specialty: 'Cirugía Plástica Estética y Reconstructiva',
     matricula: 'M.N. 174190',
-    image: '/images/team/DOMA_Personal-10.jpg',
+    image: '/images/team/majo-arauz.webp',
     credentials: [
       'Especialista en Cirugía plástica estética y reconstructiva',
       'Formación avanzada en Plástica Facial',
@@ -32,7 +42,37 @@ const doctors = [
   },
 ]
 
-export default function TeamSection() {
+async function getDoctors(): Promise<TeamDoctor[]> {
+  if (!isSupabaseConfigured) {
+    return fallbackDoctors
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('medicos')
+      .select('nombre,especialidad,matricula,foto_url,curriculum,slug')
+      .order('nombre', { ascending: true })
+
+    if (error || !data) {
+      return []
+    }
+
+    return (data as Medico[]).map((medico) => ({
+      name: medico.nombre,
+      specialty: medico.especialidad,
+      matricula: medico.matricula,
+      image: medico.foto_url,
+      credentials: medico.curriculum || [],
+      slug: medico.slug,
+    }))
+  } catch {
+    return []
+  }
+}
+
+export default async function TeamSection() {
+  const doctors = await getDoctors()
+
   return (
     <section id="equipo" className="relative py-28 lg:py-36 overflow-hidden">
       {/* Background */}
@@ -48,7 +88,7 @@ export default function TeamSection() {
             <h2 className="text-4xl lg:text-5xl font-black text-doma-dark leading-tight">
               Profesionales de
               <br />
-              <span className="gradient-text">excelencia comprobada</span>
+              <span className="gradient-text">atención personalizada</span>
             </h2>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
@@ -136,7 +176,7 @@ export default function TeamSection() {
           <p className="text-doma-muted mb-6">
             ¿Querés saber más sobre nuestro equipo?
           </p>
-          <a href="#contacto" className="btn-primary">
+          <a href="/contacto" className="btn-primary">
             Solicitar una evaluación
           </a>
         </AnimatedSection>

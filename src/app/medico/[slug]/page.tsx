@@ -1,7 +1,7 @@
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import DoctorLanding from '@/components/DoctorLanding'
 import { notFound } from 'next/navigation'
-import { Medico } from '@/types/database'
+import { AntesDespues, Medico } from '@/types/database'
 
 const fallbackMedicos: Record<string, Medico> = {
   'pablo-vega': {
@@ -9,7 +9,7 @@ const fallbackMedicos: Record<string, Medico> = {
     nombre: 'Dr. Pablo Vega',
     especialidad: 'Cirugía Plástica y Reconstructiva',
     matricula: 'M.N. 170504',
-    foto_url: '/images/team/DOMA_Personal-9.jpg',
+    foto_url: '/images/team/pablo-vega.webp',
     video_url: '',
     curriculum: [
       'Especialista en Cirugía plástica estética y reconstructiva',
@@ -26,7 +26,7 @@ const fallbackMedicos: Record<string, Medico> = {
     nombre: 'Dra. Majo Arauz',
     especialidad: 'Cirugía Facial y Medicina Estética',
     matricula: 'M.N. 174190',
-    foto_url: '/images/team/DOMA_Personal-10.jpg',
+    foto_url: '/images/team/majo-arauz.webp',
     video_url: '',
     curriculum: [
       'Especialista en rejuvenecimiento facial',
@@ -38,6 +38,9 @@ const fallbackMedicos: Record<string, Medico> = {
     slug: 'majo-arauz',
   },
 }
+
+export const revalidate = 60
+export const dynamicParams = true
 
 // Generación estática para SEO y rendimiento
 export async function generateStaticParams() {
@@ -54,9 +57,7 @@ export async function generateStaticParams() {
     dbSlugs = []
   }
 
-  const fallbackSlugs = Object.keys(fallbackMedicos).map((slug) => ({ slug }))
-
-  return [...dbSlugs, ...fallbackSlugs]
+  return dbSlugs
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
@@ -85,25 +86,23 @@ export default async function Page({ params }: { params: { slug: string } }) {
     medicoError = error
   }
 
-  const medicoFinal = !medicoError && medico ? medico : fallbackMedicos[slug]
-
-  if (!medicoFinal) {
+  if (medicoError || !medico) {
     notFound()
   }
 
   // 2. Obtener galería de resultados para este médico
-  let galeria: any[] = []
+  let galeria: AntesDespues[] = []
 
   try {
     const { data } = await supabase
       .from('antes_despues')
       .select('*')
-      .eq('medico_id', medicoFinal.id)
+      .eq('medico_id', medico.id)
 
-    galeria = data || []
+    galeria = (data || []) as AntesDespues[]
   } catch {
     galeria = []
   }
 
-  return <DoctorLanding medico={medicoFinal} galeria={galeria} />
+  return <DoctorLanding medico={medico} galeria={galeria} />
 }

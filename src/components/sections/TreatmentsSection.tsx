@@ -14,7 +14,7 @@ const treatments = [
       'Definición corporal de alta precisión que permite resaltar la musculatura y mejorar el contorno corporal de forma natural. Utilizamos varias tecnologías logrando resultados más definidos y una recuperación más rápida.',
     features: ['Mayor definición muscular', 'Recuperación más rápida', 'Resultados naturales'],
     cta: 'Consultar con el especialista',
-    image: '/images/treatments/ImplanteGluteo-4.03-2.jpg',
+    image: '/images/treatments/lipoescultura-hd.webp',
   },
   {
     icon: Sparkles,
@@ -23,7 +23,7 @@ const treatments = [
       'Cirugía que permite eliminar el exceso de piel y grasa abdominal, logrando un abdomen más firme, plano y definido. Ideal para pacientes con flacidez, diástasis o cambios post embarazo.',
     features: ['Técnicas avanzadas', 'Resultados duraderos', 'Definición corporal 360'],
     cta: 'Quiero mi evaluación',
-    image: '/images/treatments/ImplanteGluteo-4.03-3.jpg',
+    image: '/images/treatments/abdominoplastia.webp',
   },
   {
     icon: Activity,
@@ -32,7 +32,7 @@ const treatments = [
       'Cirugía integral que permite redefinir el contorno corporal trabajando múltiples zonas en una misma intervención, logrando una silueta más estilizada, armónica y natural. Ideal para pacientes que buscan un cambio corporal completo.',
     features: ['Combinación de técnicas', 'Mayor definición corporal', 'Resultados armónicos'],
     cta: 'Consultar con el especialista',
-    image: '/images/treatments/ImplanteGluteo-4.03-4.jpg',
+    image: '/images/treatments/body-lifting.webp',
   },
   {
     icon: Syringe,
@@ -41,7 +41,7 @@ const treatments = [
       'Procedimientos diseñados para mejorar la forma, el tamaño, volumen y armonía de las mamas, adaptados a las características y objetivos de cada paciente.',
     features: ['Aumento mamario', 'Mastopexia', 'Recambio de implantes'],
     cta: 'Quiero mi evaluación',
-    image: '/images/treatments/ImplanteGluteo-4.03-5.jpg',
+    image: '/images/team/pablo-vega.webp',
   },
   {
     icon: Droplets,
@@ -50,7 +50,7 @@ const treatments = [
       'Procedimientos diseñados para mejorar la forma, proyección y volumen de los glúteos, logrando un contorno más armónico y natural.',
     features: ['Implantes glúteos', 'Transferencia glútea', 'Resultados naturales'],
     cta: 'Quiero mi evaluación',
-    image: '/images/treatments/ImplanteGluteo-4.03.jpg',
+    image: '/images/treatments/cirugia-glutea.webp',
   },
   {
     icon: Eye,
@@ -59,7 +59,7 @@ const treatments = [
       'Procedimientos diseñados para rejuvenecer y armonizar el rostro, mejorando la apariencia sin perder naturalidad.',
     features: ['Blefaroplastia', 'Lifting facial', 'Lifting de cejas'],
     cta: 'Quiero mi evaluación',
-    image: '/images/team/DOMA_Personal-7.jpg',
+    image: '/images/team/majo-arauz.webp',
   },
   {
     icon: Sparkles,
@@ -68,7 +68,7 @@ const treatments = [
       'Tratamientos no quirúrgicos diseñados para mejorar la calidad de la piel, prevenir el envejecimiento y realzar la armonía facial de forma natural.',
     features: ['Ácido hialurónico', 'Toxina botulínica', 'Skinboosters', 'Bioestimuladores'],
     cta: 'Quiero mi evaluación',
-    image: '/images/team/DOMA_Personal-8.jpg',
+    image: '/images/treatments/medicina-estetica.webp',
   },
 ]
 
@@ -179,20 +179,36 @@ export default function TreatmentsSection() {
         <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
           {treatments.map((t, i) => (
             <AnimatedSection key={i} delay={0.1 * i}>
-              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4 hover:bg-white/10 transition-all">
-                <div className="w-12 h-12 rounded-xl bg-doma-accent/20 flex items-center justify-center">
-                  <t.icon className="w-6 h-6 text-doma-accent" />
+              <div className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden hover:bg-white/10 transition-all">
+                <div
+                  className="h-52 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${t.image})` }}
+                />
+                <div className="p-6 space-y-4">
+                  <div className="w-12 h-12 rounded-xl bg-doma-accent/20 flex items-center justify-center">
+                    <t.icon className="w-6 h-6 text-doma-accent" />
+                  </div>
+                  <h4 className="text-lg font-bold text-white">{t.title}</h4>
+                  <p className="text-white/50 text-sm leading-relaxed">
+                    {t.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {t.features.map((feature) => (
+                      <span
+                        key={feature}
+                        className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-doma-accent text-xs font-medium"
+                      >
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href="#contacto"
+                    className="inline-flex items-center gap-2 text-doma-accent text-sm font-bold hover:gap-3 transition-all"
+                  >
+                    {t.cta} <ArrowRight className="w-4 h-4" />
+                  </a>
                 </div>
-                <h4 className="text-lg font-bold text-white">{t.title}</h4>
-                <p className="text-white/50 text-sm leading-relaxed">
-                  {t.description}
-                </p>
-                <a
-                  href="#contacto"
-                  className="inline-flex items-center gap-2 text-doma-accent text-sm font-bold hover:gap-3 transition-all"
-                >
-                  Más info <ArrowRight className="w-4 h-4" />
-                </a>
               </div>
             </AnimatedSection>
           ))}

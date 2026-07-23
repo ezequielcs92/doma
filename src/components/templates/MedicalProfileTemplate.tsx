@@ -23,6 +23,27 @@ type MedicalProfileTemplateProps = {
   galeria: AntesDespues[]
 }
 
+function getSafeVideo(videoUrl?: string) {
+  if (!videoUrl) {
+    return null
+  }
+
+  try {
+    const url = new URL(videoUrl)
+
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+      return null
+    }
+
+    return {
+      url: url.toString(),
+      isDirect: /\.(mp4|webm|ogg|mov|m4v)$/i.test(url.pathname),
+    }
+  } catch {
+    return null
+  }
+}
+
 // ─── Per-doctor content configuration ───
 
 type DoctorConfig = {
@@ -188,6 +209,7 @@ export default function MedicalProfileTemplate({
   galeria,
 }: MedicalProfileTemplateProps) {
   const config = doctorConfigs[medico.slug] || defaultConfig
+  const video = getSafeVideo(medico.video_url)
 
   return (
     <>
@@ -291,7 +313,7 @@ export default function MedicalProfileTemplate({
         )}
 
         {/* ─── Video ─── */}
-        {medico.video_url && (
+        {video && (
           <section className="py-24 px-6 bg-doma-dark">
             <AnimatedSection className="max-w-5xl mx-auto text-center space-y-8">
               <h2 className="text-3xl md:text-4xl font-black text-white">
@@ -300,11 +322,26 @@ export default function MedicalProfileTemplate({
               <p className="text-white/70 max-w-2xl mx-auto">
                 Conocé el enfoque médico, la filosofía de trabajo y el criterio profesional detrás de cada caso.
               </p>
-              <div className="relative aspect-video rounded-3xl overflow-hidden bg-gray-900 border border-white/10 shadow-2xl group cursor-pointer">
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all">
-                  <PlayCircle className="w-20 h-20 text-doma-accent opacity-80 group-hover:scale-110 transition-transform" />
-                </div>
-              </div>
+              {video.isDirect ? (
+                <video
+                  src={video.url}
+                  controls
+                  preload="metadata"
+                  className="w-full aspect-video rounded-3xl bg-gray-900 border border-white/10 shadow-2xl"
+                >
+                  Tu navegador no puede reproducir este video.
+                </video>
+              ) : (
+                <a
+                  href={video.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 rounded-full bg-doma-accent px-7 py-4 font-bold text-white transition-colors hover:bg-doma-accent/90"
+                >
+                  <PlayCircle className="w-6 h-6" />
+                  Ver video de presentación
+                </a>
+              )}
             </AnimatedSection>
           </section>
         )}
@@ -325,11 +362,11 @@ export default function MedicalProfileTemplate({
                 </div>
 
                 <p className="text-lg text-doma-muted leading-relaxed">
-                  {config.profileText || medico.trayectoria}
+                  {medico.trayectoria || config.profileText}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {(config.bullets.length > 0 ? config.bullets : medico.curriculum).map((item, index) => (
+                  {(medico.curriculum?.length > 0 ? medico.curriculum : config.bullets).map((item, index) => (
                     <div
                       key={index}
                       className="flex gap-3 items-start p-4 rounded-2xl bg-surface border border-doma-light/30 hover:border-doma-accent/30 hover:shadow-md transition-all"

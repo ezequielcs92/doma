@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import AnalyticsConsentBanner from "@/components/AnalyticsConsentBanner";
 import PageViewTracker from "@/components/PageViewTracker";
 import "./globals.css";
 
@@ -12,7 +13,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "DOMA Sculpt Center | Cirugía Estética de Alta Gama",
   description:
-    "Centro de cirugía estética con tecnología de vanguardia. Definición corporal, liposucción y medicina estética avanzada con los mejores profesionales.",
+    "Centro de cirugía estética con evaluación personalizada, definición corporal, liposucción y medicina estética.",
   keywords: [
     "cirugía estética",
     "liposucción",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "DOMA Sculpt Center | Cirugía Estética de Alta Gama",
     description:
-      "Centro de cirugía estética con tecnología de vanguardia y los mejores profesionales.",
+      "Centro de cirugía estética con evaluación personalizada y seguimiento profesional.",
     type: "website",
   },
 };
@@ -38,9 +39,8 @@ export default function RootLayout({
       <body className={`${inter.variable} font-mont antialiased`}>
         <PageViewTracker />
         {children}
+        <AnalyticsConsentBanner />
       </body>
     </html>
   );
 }
-
-

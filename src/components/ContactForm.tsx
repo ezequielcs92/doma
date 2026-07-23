@@ -1,14 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { Lead } from '@/types/database'
-import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 import { CheckCircle2, Loader2, ArrowRight } from 'lucide-react'
+import Turnstile from '@/components/Turnstile'
 
 export default function ContactForm({ medicoId, formTitle, formSubtitle }: { medicoId: string; formTitle?: string; formSubtitle?: string }) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileVersion, setTurnstileVersion] = useState(0)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -16,22 +17,44 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
     setError(null)
 
     const formData = new FormData(e.currentTarget)
-    const tratamiento = (formData.get('tratamiento') as string) || 'No especificado'
-    const consulta = (formData.get('mensaje') as string) || ''
-    const lead: Lead = {
-      nombre: formData.get('nombre') as string,
-      email: formData.get('email') as string,
-      telefono: formData.get('telefono') as string,
-      mensaje: `Tratamiento de interes: ${tratamiento}\n${consulta}`,
+    const turnstileToken = String(formData.get('cf-turnstile-response') ?? '')
+    const lead = {
+      nombre: String(formData.get('nombre') ?? ''),
+      email: String(formData.get('email') ?? ''),
+      telefono: String(formData.get('telefono') ?? ''),
+      mensaje: String(formData.get('mensaje') ?? ''),
+      procedimiento: String(formData.get('procedimiento') ?? ''),
       medico_id: medicoId,
+      website: String(formData.get('website') ?? ''),
+      privacyAccepted: formData.get('privacyAccepted') === 'on',
+      ...(turnstileToken ? { 'cf-turnstile-response': turnstileToken } : {}),
     }
 
     try {
-      const { error: insertError } = await supabase.from('leads').insert([lead])
-      if (insertError) throw insertError
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead),
+      })
+      const result: unknown = await response.json().catch(() => null)
+      if (!response.ok) {
+        const message =
+          typeof result === 'object' &&
+          result !== null &&
+          'error' in result &&
+          typeof result.error === 'string'
+            ? result.error
+            : 'Hubo un error al enviar tus datos. Por favor intenta de nuevo.'
+        throw new Error(message)
+      }
       setSuccess(true)
-    } catch {
-      setError('Hubo un error al enviar tus datos. Por favor intenta de nuevo.')
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : 'Hubo un error al enviar tus datos. Por favor intenta de nuevo.'
+      )
+      setTurnstileVersion((version) => version + 1)
     } finally {
       setLoading(false)
     }
@@ -50,16 +73,19 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-10 rounded-3xl shadow-2xl shadow-doma-violet/5 border border-doma-light/30 space-y-5">
+    <form onSubmit={handleSubmit} className="relative bg-white p-10 rounded-3xl shadow-2xl shadow-doma-violet/5 border border-doma-light/30 space-y-5">
       <h3 className="text-2xl font-black text-doma-dark mb-2 text-center">{formTitle || 'Agenda tu evaluación personalizada'}</h3>
       <p className="text-sm text-doma-muted text-center mb-4">{formSubtitle || 'Evaluación médica personalizada según tu caso.'}</p>
 
       <div>
-        <label className="block text-sm font-bold mb-2 text-doma-dark">Nombre Completo</label>
+        <label htmlFor="doctor-nombre" className="block text-sm font-bold mb-2 text-doma-dark">Nombre Completo</label>
         <input
+          id="doctor-nombre"
           name="nombre"
           required
           type="text"
+          autoComplete="name"
+          maxLength={100}
           placeholder="Tu nombre"
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400"
         />
@@ -67,21 +93,27 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-bold mb-2 text-doma-dark">Email</label>
+          <label htmlFor="doctor-email" className="block text-sm font-bold mb-2 text-doma-dark">Email</label>
           <input
+            id="doctor-email"
             name="email"
             required
             type="email"
+            autoComplete="email"
+            maxLength={254}
             placeholder="tu@email.com"
             className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400"
           />
         </div>
         <div>
-          <label className="block text-sm font-bold mb-2 text-doma-dark">Teléfono</label>
+          <label htmlFor="doctor-telefono" className="block text-sm font-bold mb-2 text-doma-dark">Teléfono</label>
           <input
+            id="doctor-telefono"
             name="telefono"
             required
             type="tel"
+            autoComplete="tel"
+            maxLength={30}
             placeholder="+54 9 11 ..."
             className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400"
           />
@@ -89,9 +121,10 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
       </div>
 
       <div>
-        <label className="block text-sm font-bold mb-2 text-doma-dark">Tratamiento de interes</label>
+        <label htmlFor="doctor-procedimiento" className="block text-sm font-bold mb-2 text-doma-dark">Tratamiento de interes</label>
         <select
-          name="tratamiento"
+          id="doctor-procedimiento"
+          name="procedimiento"
           required
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark"
         >
@@ -109,17 +142,26 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
       </div>
 
       <div>
-        <label className="block text-sm font-bold mb-2 text-doma-dark">Tu Consulta</label>
+        <label htmlFor="doctor-mensaje" className="block text-sm font-bold mb-2 text-doma-dark">Tu Consulta</label>
         <textarea
+          id="doctor-mensaje"
           name="mensaje"
           rows={3}
+          maxLength={2000}
           placeholder="¿En qué podemos ayudarte?"
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400 resize-none"
         ></textarea>
       </div>
 
+      <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+        <label htmlFor="doctor-website">Sitio web</label>
+        <input id="doctor-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
+      <Turnstile key={turnstileVersion} />
+
       {error && (
-        <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
+        <div role="alert" aria-live="polite" className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
           {error}
         </div>
       )}
@@ -139,9 +181,21 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
         )}
       </button>
 
-      <p className="text-[11px] text-gray-400 text-center leading-relaxed">
-        Al enviar, aceptás nuestras políticas de privacidad y el tratamiento confidencial de tus datos.
-      </p>
+      <label className="flex items-start gap-3 text-xs leading-relaxed text-gray-500">
+        <input
+          name="privacyAccepted"
+          type="checkbox"
+          required
+          className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-doma-violet"
+        />
+        <span>
+          Acepto la{' '}
+          <Link href="/privacidad" className="font-bold text-doma-violet underline">
+            política de privacidad
+          </Link>{' '}
+          y el uso de mis datos para responder esta consulta.
+        </span>
+      </label>
     </form>
   )
 }

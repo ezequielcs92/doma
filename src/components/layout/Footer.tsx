@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Instagram, Phone, MapPin, Clock } from 'lucide-react'
+import { Phone, MapPin, Clock } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -85,20 +85,13 @@ export default function Footer() {
             <h4 className="font-bold text-doma-accent mb-6 text-sm uppercase tracking-widest">
               Seguinos
             </h4>
-            <div className="flex gap-3">
-              <a
-                href="#"
-                className="w-12 h-12 rounded-xl bg-white/5 hover:bg-doma-accent/20 border border-white/10 flex items-center justify-center transition-all hover:scale-110"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-            </div>
+            <p className="text-sm leading-relaxed text-white/60">
+              Consultas y turnos por teléfono, correo electrónico o WhatsApp.
+            </p>
             <div className="mt-8 p-4 rounded-2xl bg-white/5 border border-white/10">
               <p className="text-xs text-white/40 leading-relaxed">
-                DOMA Sculpt Center opera bajo las regulaciones del
-                Ministerio de Salud de la Nación. Todos nuestros
-                profesionales están debidamente matriculados.
+                La información del sitio es general y no reemplaza una
+                evaluación médica personalizada.
               </p>
             </div>
           </div>
@@ -111,12 +104,12 @@ export default function Footer() {
             reservados.
           </p>
           <div className="flex gap-6 text-xs text-white/30">
-            <a href="#" className="hover:text-white/60 transition-colors">
+            <Link href="/privacidad" className="hover:text-white/60 transition-colors">
               Política de Privacidad
-            </a>
-            <a href="#" className="hover:text-white/60 transition-colors">
+            </Link>
+            <Link href="/terminos" className="hover:text-white/60 transition-colors">
               Términos y Condiciones
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -12,6 +12,19 @@ export type BlogPost = {
   content: string[]
 }
 
+export function formatBlogDate(value: string) {
+  const civilDate = /^(\d{4})-(\d{2})-(\d{2})/.exec(value)
+
+  if (!civilDate) {
+    return value
+  }
+
+  const [, year, month, day] = civilDate
+  const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)))
+
+  return date.toLocaleDateString('es-AR', { timeZone: 'UTC' })
+}
+
 const fallbackBlogPosts: BlogPost[] = [
   {
     slug: 'como-elegir-tu-cirujano-estetico',
@@ -160,18 +173,18 @@ const fallbackBlogPosts: BlogPost[] = [
   },
 ]
 
-function normalizeBlogPost(item: any): BlogPost {
+function normalizeBlogPost(item: Record<string, unknown>): BlogPost {
   return {
-    id: item.id,
-    slug: item.slug || '',
-    title: item.title || '',
-    excerpt: item.excerpt || '',
-    cover: item.cover || '/images/team/DOMA.jpg',
-    date: item.date || new Date().toISOString().slice(0, 10),
-    author: item.author || 'Equipo DOMA',
-    category: item.category || 'Guia',
+    id: typeof item.id === 'string' ? item.id : undefined,
+    slug: String(item.slug || ''),
+    title: String(item.title || ''),
+    excerpt: String(item.excerpt || ''),
+    cover: String(item.cover || '/images/team/DOMA.jpg'),
+    date: String(item.date || new Date().toISOString().slice(0, 10)),
+    author: String(item.author || 'Equipo DOMA'),
+    category: String(item.category || 'Guia'),
     content: Array.isArray(item.content)
-      ? item.content
+      ? item.content.map(String)
       : String(item.content || '')
           .split('\n')
           .map((line) => line.trim())
@@ -192,17 +205,13 @@ export async function getAllBlogPosts() {
       .select('*')
       .order('date', { ascending: false })
 
-    if (error || !data || data.length === 0) {
-      return [...fallbackBlogPosts].sort((a, b) =>
-        new Date(b.date).getTime() - new Date(a.date).getTime()
-      )
+    if (error || !data) {
+      return []
     }
 
     return data.map(normalizeBlogPost)
   } catch {
-    return [...fallbackBlogPosts].sort((a, b) =>
-      new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
+    return []
   }
 }
 
@@ -218,12 +227,12 @@ export async function getBlogPostBySlug(slug: string) {
       .eq('slug', slug)
       .maybeSingle()
 
-    if (!error && data) {
-      return normalizeBlogPost(data)
+    if (error || !data) {
+      return undefined
     }
 
-    return fallbackBlogPosts.find((post) => post.slug === slug)
+    return normalizeBlogPost(data)
   } catch {
-    return fallbackBlogPosts.find((post) => post.slug === slug)
+    return undefined
   }
 }

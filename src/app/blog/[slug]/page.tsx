@@ -2,7 +2,10 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog'
+import { formatBlogDate, getAllBlogPosts, getBlogPostBySlug } from '@/lib/blog'
+
+export const revalidate = 60
+export const dynamicParams = true
 
 function renderBoldText(text: string) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g)
@@ -47,7 +50,7 @@ export default async function BlogPostPage({
           <div className="flex items-center gap-4 text-sm text-doma-muted mb-8">
             <span>{post.author}</span>
             <span>•</span>
-            <span>{new Date(post.date).toLocaleDateString('es-AR')}</span>
+            <span>{formatBlogDate(post.date)}</span>
           </div>
 
           <div className="relative h-72 md:h-96 rounded-3xl overflow-hidden mb-10">
