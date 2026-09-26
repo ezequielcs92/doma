@@ -35,6 +35,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog/botox-y-acido-hialuronico",
+        destination: "/blog/toxina-botulinica-y-acido-hialuronico",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

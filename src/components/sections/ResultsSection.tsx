@@ -5,47 +5,43 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 import SectionLabel from '@/components/ui/SectionLabel'
 import BeforeAfterSlider from '@/components/ui/BeforeAfterSlider'
 import { cn } from '@/lib/utils'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { X, ZoomIn } from 'lucide-react'
 
-const categories = [
-  'Todos',
-  'Lipoescultura HD',
-  'Body Lifting',
-  'Cirugía Glútea',
-  'Medicina Estética',
-]
+type Result = { id: string; title: string; category: string; before: string; after: string }
 
-const results = [
+// Cases bundled with the site; cases uploaded from /admin are loaded on top.
+const staticResults: Result[] = [
   {
-    id: 1,
+    id: 'static-1',
     title: 'Lipodermoescultura',
     category: 'Lipoescultura HD',
     before: '/images/results/lipodermoescultura-antes-h.webp',
     after: '/images/results/lipodermoescultura-despues-h.webp',
   },
   {
-    id: 2,
+    id: 'static-2',
     title: 'Lipoescultura HD',
     category: 'Lipoescultura HD',
     before: '/images/results/lipoescultura-hd-antes-h.webp',
     after: '/images/results/lipoescultura-hd-despues-h.webp',
   },
   {
-    id: 3,
+    id: 'static-3',
     title: 'Body Lifting',
     category: 'Body Lifting',
     before: '/images/results/body-lifting-antes-h.webp',
     after: '/images/results/body-lifting-despues-h.webp',
   },
   {
-    id: 4,
+    id: 'static-4',
     title: 'Cirugía Glútea',
     category: 'Cirugía Glútea',
     before: '/images/results/cirugia-glutea-antes-h.webp',
     after: '/images/results/cirugia-glutea-despues-h.webp',
   },
   {
-    id: 5,
+    id: 'static-5',
     title: 'Relleno Labial',
     category: 'Medicina Estética',
     before: '/images/results/medicina-estetica-antes-h.webp',
@@ -55,7 +51,35 @@ const results = [
 
 export default function ResultsSection() {
   const [activeCategory, setActiveCategory] = useState('Todos')
-  const [lightbox, setLightbox] = useState<number | null>(null)
+  const [lightbox, setLightbox] = useState<string | null>(null)
+  const [uploadedResults, setUploadedResults] = useState<Result[]>([])
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return
+    let cancelled = false
+    supabase
+      .from('antes_despues')
+      .select('id,titulo,categoria,url_antes,url_despues')
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (cancelled || !data) return
+        setUploadedResults(
+          data.map((item) => ({
+            id: String(item.id),
+            title: String(item.titulo),
+            category: String(item.categoria),
+            before: String(item.url_antes),
+            after: String(item.url_despues),
+          }))
+        )
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const results = [...uploadedResults, ...staticResults]
+  const categories = ['Todos', ...Array.from(new Set(results.map((result) => result.category)))]
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
   const openerRef = useRef<HTMLButtonElement | null>(null)

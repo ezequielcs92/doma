@@ -1,6 +1,6 @@
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import Link from 'next/link'
-import { SITE_ADDRESS } from '@/lib/site'
+import { SITE_ADDRESS, SITE_EMAIL } from '@/lib/site'
 
 export default function MedicalFooter() {
   return (
@@ -36,9 +36,9 @@ export default function MedicalFooter() {
                 <Phone className="w-4 h-4 text-doma-accent" />
                 <span>+54 9 11 3025-3305</span>
               </a>
-              <a href="mailto:info@domasculpt.com" className="flex items-center gap-3 text-doma-muted hover:text-doma-violet transition-colors">
+              <a href={`mailto:${SITE_EMAIL}`} className="flex items-center gap-3 text-doma-muted hover:text-doma-violet transition-colors">
                 <Mail className="w-4 h-4 text-doma-accent" />
-                <span>info@domasculpt.com</span>
+                <span>{SITE_EMAIL}</span>
               </a>
               <div className="flex items-center gap-3 text-doma-muted">
                 <Clock className="w-4 h-4 text-doma-accent" />

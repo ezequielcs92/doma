@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
-import { SITE_ADDRESS_FULL } from '@/lib/site'
+import { SITE_ADDRESS_FULL, SITE_EMAIL } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Términos y Condiciones | DOMA Sculpt Center',
@@ -38,7 +38,7 @@ export default function TerminosPage() {
               <p className="mt-4 leading-relaxed">
                 El sitio corresponde a DOMA Sculpt Center, con atención informada
                 en {SITE_ADDRESS_FULL}. Podés contactarte por medio de{' '}
-                <a className="font-bold text-doma-violet underline" href="mailto:info@domasculpt.com">info@domasculpt.com</a>{' '}
+                <a className="font-bold text-doma-violet underline" href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a>{' '}
                 o al <a className="font-bold text-doma-violet underline" href="tel:+5491130253305">+54 9 11 3025-3305</a>.
                 No se publican razón social ni CUIT porque esos datos aún no están
                 confirmados y deben completarse tras revisión legal. El acceso y

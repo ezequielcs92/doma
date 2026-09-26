@@ -76,8 +76,8 @@ const fallbackBlogPosts: BlogPost[] = [
     ],
   },
   {
-    slug: 'botox-y-acido-hialuronico',
-    title: 'Botox y ácido hialurónico: ¿cuál es mejor para vos?',
+    slug: 'toxina-botulinica-y-acido-hialuronico',
+    title: 'Toxina botulínica y ácido hialurónico: ¿cuál es mejor para vos?',
     excerpt:
       'Es una de las dudas más comunes en medicina estética. Aunque muchas veces se confunden, cumplen funciones diferentes.',
     cover: '/images/team/DOMA_Personal-2-h.webp',
@@ -85,9 +85,9 @@ const fallbackBlogPosts: BlogPost[] = [
     author: 'Dra. Majo Arauz',
     category: 'Medicina Estética',
     content: [
-      '## Botox y ácido hialurónico: ¿cuál es mejor para vos?',
+      '## Toxina botulínica y ácido hialurónico: ¿cuál es mejor para vos?',
       'Es una de las dudas más comunes en medicina estética. Aunque muchas veces se confunden, cumplen funciones diferentes.',
-      '### Botox (toxina botulínica)',
+      '### Toxina botulínica',
       'Se utiliza para relajar los músculos responsables de las líneas de expresión. Ideal para:',
       '- Arrugas en frente',
       '- Entrecejo',
@@ -104,7 +104,7 @@ const fallbackBlogPosts: BlogPost[] = [
       '✔️ Mejora la hidratación y el aspecto de la piel',
       '### Entonces, ¿cuál necesito?',
       'Depende de tu objetivo:',
-      '- Arrugas de expresión → Botox',
+      '- Arrugas de expresión → Toxina botulínica',
       '- Volumen o contorno → Ácido hialurónico',
       '- Muchas veces → combinación de ambos',
       '### Conclusión',

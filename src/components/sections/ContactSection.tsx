@@ -8,7 +8,7 @@ import SectionLabel from '@/components/ui/SectionLabel'
 import Turnstile from '@/components/Turnstile'
 import { getClickId } from '@/lib/attribution'
 import { storePendingLead } from '@/lib/conversion'
-import { SITE_ADDRESS, SITE_MAPS_URL } from '@/lib/site'
+import { SITE_ADDRESS, SITE_MAPS_URL, SITE_EMAIL } from '@/lib/site'
 import {
   CheckCircle2,
   Loader2,
@@ -124,8 +124,8 @@ export default function ContactSection() {
                 {
                   icon: Mail,
                   label: 'Email',
-                  value: 'info@domasculpt.com',
-                  href: 'mailto:info@domasculpt.com',
+                  value: SITE_EMAIL,
+                  href: `mailto:${SITE_EMAIL}`,
                 },
                 {
                   icon: MapPin,

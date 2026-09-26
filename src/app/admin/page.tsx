@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import LeadsTab from '@/components/admin/LeadsTab'
+import ResultsTab from '@/components/admin/ResultsTab'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { Lead, Medico } from '@/types/database'
 import { Session } from '@supabase/supabase-js'
@@ -19,6 +21,8 @@ import {
   BarChart3,
   Users,
   MousePointerClick,
+  Inbox,
+  Images,
 } from 'lucide-react'
 
 type CmsBlogPost = {
@@ -56,6 +60,8 @@ function normalizeCmsBlogPost(item: Record<string, unknown>): CmsBlogPost {
 }
 
 const ADMIN_EMAIL = 'admin@doma.com'
+
+type AdminTab = 'consultas' | 'resultados' | 'blog' | 'medicos' | 'estadisticas'
 
 const emptyBlogForm: CmsBlogPost = {
   slug: '',
@@ -100,7 +106,7 @@ export default function DashboardPage() {
 
   const [cmsLoading, setCmsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'blog' | 'medicos' | 'estadisticas'>('blog')
+  const [activeTab, setActiveTab] = useState<AdminTab>('consultas')
 
   const [posts, setPosts] = useState<CmsBlogPost[]>([])
   const [blogForm, setBlogForm] = useState<CmsBlogPost>(emptyBlogForm)
@@ -538,13 +544,15 @@ export default function DashboardPage() {
                   <p className="text-xs font-bold uppercase tracking-widest text-doma-muted px-3 py-2">Secciones CMS</p>
                   <div className="space-y-1.5 mt-2">
                     {[
+                      { key: 'consultas', label: 'Consultas', icon: Inbox },
+                      { key: 'resultados', label: 'Antes y después', icon: Images },
                       { key: 'blog', label: 'Blog', icon: FileText },
                       { key: 'medicos', label: 'Profesionales', icon: Stethoscope },
                       { key: 'estadisticas', label: 'Estadisticas', icon: BarChart3 },
                     ].map((tab) => (
                       <button
                         key={tab.key}
-                        onClick={() => setActiveTab(tab.key as 'blog' | 'medicos' | 'estadisticas')}
+                        onClick={() => setActiveTab(tab.key as AdminTab)}
                         className={`w-full text-left px-3.5 py-3 rounded-xl text-sm font-bold transition-colors inline-flex items-center gap-2.5 ${
                           activeTab === tab.key
                             ? 'bg-doma-violet text-white'
@@ -559,6 +567,12 @@ export default function DashboardPage() {
                 </aside>
 
                 <div>
+                  {activeTab === 'consultas' && (
+                    <LeadsTab leads={leads} medicos={medicos} onLeadsChange={setLeads} onError={setError} />
+                  )}
+
+                  {activeTab === 'resultados' && <ResultsTab medicos={medicos} onError={setError} />}
+
                   {activeTab === 'blog' && (
                     <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
                       <section className="xl:col-span-3 rounded-3xl bg-white border border-doma-light/40 shadow-sm overflow-hidden">

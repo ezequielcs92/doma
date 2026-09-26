@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import AnalyticsConsentControls from '@/components/AnalyticsConsentControls'
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
-import { SITE_ADDRESS_FULL } from '@/lib/site'
+import { SITE_ADDRESS_FULL, SITE_EMAIL } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Política de Privacidad | DOMA Sculpt Center',
@@ -40,8 +40,8 @@ export default function PrivacidadPage() {
                 El sitio se identifica comercialmente como DOMA Sculpt Center,
                 con atención en {SITE_ADDRESS_FULL}. Para consultas sobre privacidad o para
                 ejercer derechos, podés escribir a{' '}
-                <a className="font-bold text-doma-violet underline" href="mailto:info@domasculpt.com">
-                  info@domasculpt.com
+                <a className="font-bold text-doma-violet underline" href={`mailto:${SITE_EMAIL}`}>
+                  {SITE_EMAIL}
                 </a>{' '}
                 o llamar al{' '}
                 <a className="font-bold text-doma-violet underline" href="tel:+5491130253305">
