@@ -42,8 +42,9 @@ export default function AnalyticsConsentBanner() {
             className="mt-2 text-sm leading-relaxed text-doma-muted"
           >
             Con tu permiso, registramos páginas visitadas mediante Supabase para
-            mejorar el sitio. Usamos un identificador aleatorio que dura solo
-            durante esta sesión. Si rechazás, no enviamos estos datos. Consultá
+            mejorar el sitio y usamos la etiqueta de Google Ads para medir las
+            consultas que llegan desde nuestros anuncios. Si rechazás, no
+            enviamos estos datos. Consultá
             la{' '}
             <Link
               href="/privacidad"

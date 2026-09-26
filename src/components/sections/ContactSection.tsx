@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import SectionLabel from '@/components/ui/SectionLabel'
 import Turnstile from '@/components/Turnstile'
-import { trackLeadConversion } from '@/lib/conversion'
+import { getClickId } from '@/lib/attribution'
+import { storePendingLead } from '@/lib/conversion'
 import { SITE_ADDRESS, SITE_MAPS_URL } from '@/lib/site'
 import {
   CheckCircle2,
@@ -18,6 +20,7 @@ import {
 } from 'lucide-react'
 
 export default function ContactSection() {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -30,6 +33,7 @@ export default function ContactSection() {
 
     const formData = new FormData(e.currentTarget)
     const turnstileToken = String(formData.get('cf-turnstile-response') ?? '')
+    const clickId = getClickId()
     const data = {
       nombre: String(formData.get('nombre') ?? ''),
       email: String(formData.get('email') ?? ''),
@@ -40,6 +44,7 @@ export default function ContactSection() {
       website: String(formData.get('website') ?? ''),
       privacyAccepted: formData.get('privacyAccepted') === 'on',
       ...(turnstileToken ? { 'cf-turnstile-response': turnstileToken } : {}),
+      ...(clickId ? { [clickId.type]: clickId.value } : {}),
     }
 
     try {
@@ -59,8 +64,9 @@ export default function ContactSection() {
             : 'Hubo un error al enviar tu consulta. Por favor intenta de nuevo.'
         throw new Error(message)
       }
-      trackLeadConversion()
+      storePendingLead({ email: data.email, phone: data.telefono })
       setSuccess(true)
+      router.push('/gracias')
     } catch (submitError) {
       setError(
         submitError instanceof Error

@@ -64,4 +64,31 @@ describe('validateLeadInput', () => {
 
     expect(result.success).toBe(false)
   })
+
+  it('accepts a lead without email', () => {
+    const withoutEmail: Record<string, unknown> = { ...validLead }
+    delete withoutEmail.email
+    const result = validateLeadInput(withoutEmail)
+
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.email).toBe('')
+  })
+
+  it('rejects an invalid email when present', () => {
+    expect(validateLeadInput({ ...validLead, email: 'not-an-email' })).toEqual({
+      success: false,
+      error: 'Ingresa un email valido.',
+    })
+  })
+
+  it('keeps a valid Google Ads click id', () => {
+    const result = validateLeadInput({ ...validLead, gclid: 'Cj0KCQjw_abc-123' })
+
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.clickId).toEqual({ type: 'gclid', value: 'Cj0KCQjw_abc-123' })
+  })
+
+  it('rejects a malformed click id', () => {
+    expect(validateLeadInput({ ...validLead, gclid: 'bad value<script>' }).success).toBe(false)
+  })
 })

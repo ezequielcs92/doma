@@ -19,12 +19,13 @@ function escapeHtml(value: string) {
 export function buildLeadEmail(lead: ValidatedLead) {
   const rows: Array<[string, string]> = [
     ['Nombre', lead.nombre],
-    ['Email', lead.email],
+    ['Email', lead.email || '—'],
     ['Teléfono', lead.telefono],
     ['Tratamiento', lead.procedimiento],
     ['Origen', lead.medico_id === 'web-general' ? 'Formulario general' : `Página de médico (${lead.medico_id})`],
     ['Mensaje', lead.mensaje || '—'],
   ]
+  if (lead.clickId) rows.push(['Google Ads', `Sí (${lead.clickId.type})`])
 
   const subject = `Nueva consulta web: ${lead.nombre} – ${lead.procedimiento}`
   const text = rows.map(([label, value]) => `${label}: ${value}`).join('\n')
@@ -54,7 +55,7 @@ export async function sendLeadNotification(lead: ValidatedLead) {
     body: JSON.stringify({
       from,
       to: to.split(',').map((address) => address.trim()).filter(Boolean),
-      reply_to: lead.email,
+      ...(lead.email ? { reply_to: lead.email } : {}),
       subject,
       text,
       html,

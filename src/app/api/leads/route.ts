@@ -143,7 +143,15 @@ export async function POST(request: Request) {
       nombre: validation.data.nombre,
       email: validation.data.email,
       telefono: validation.data.telefono,
-      mensaje: `Procedimiento de interes: ${validation.data.procedimiento}\n${validation.data.mensaje}`.trim(),
+      // Kept in the message until the leads table gets its own column; the
+      // click id is what links a lead back to the Google Ads click.
+      mensaje: [
+        `Procedimiento de interes: ${validation.data.procedimiento}`,
+        validation.data.clickId ? `${validation.data.clickId.type}: ${validation.data.clickId.value}` : '',
+        validation.data.mensaje,
+      ]
+        .filter(Boolean)
+        .join('\n'),
       medico_id: validation.data.medico_id,
     })
 

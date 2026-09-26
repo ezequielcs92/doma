@@ -2,9 +2,11 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { CheckCircle2, Loader2, ArrowRight } from 'lucide-react'
 import Turnstile from '@/components/Turnstile'
-import { trackLeadConversion } from '@/lib/conversion'
+import { getClickId } from '@/lib/attribution'
+import { storePendingLead } from '@/lib/conversion'
 
 interface ContactFormProps {
   medicoId: string
@@ -12,6 +14,8 @@ interface ContactFormProps {
   formSubtitle?: string
   idPrefix?: string
   compact?: boolean
+  showEmail?: boolean
+  defaultProcedure?: string
 }
 
 export default function ContactForm({
@@ -20,7 +24,10 @@ export default function ContactForm({
   formSubtitle,
   idPrefix = 'doctor',
   compact = false,
+  showEmail = true,
+  defaultProcedure = '',
 }: ContactFormProps) {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -33,6 +40,7 @@ export default function ContactForm({
 
     const formData = new FormData(e.currentTarget)
     const turnstileToken = String(formData.get('cf-turnstile-response') ?? '')
+    const clickId = getClickId()
     const lead = {
       nombre: String(formData.get('nombre') ?? ''),
       email: String(formData.get('email') ?? ''),
@@ -43,6 +51,7 @@ export default function ContactForm({
       website: String(formData.get('website') ?? ''),
       privacyAccepted: formData.get('privacyAccepted') === 'on',
       ...(turnstileToken ? { 'cf-turnstile-response': turnstileToken } : {}),
+      ...(clickId ? { [clickId.type]: clickId.value } : {}),
     }
 
     try {
@@ -62,8 +71,9 @@ export default function ContactForm({
             : 'Hubo un error al enviar tus datos. Por favor intenta de nuevo.'
         throw new Error(message)
       }
-      trackLeadConversion()
+      storePendingLead({ email: lead.email, phone: lead.telefono })
       setSuccess(true)
+      router.push('/gracias')
     } catch (submitError) {
       setError(
         submitError instanceof Error
@@ -107,7 +117,8 @@ export default function ContactForm({
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className={`grid grid-cols-1 gap-4 ${showEmail ? 'md:grid-cols-2' : ''}`}>
+        {showEmail && (
         <div>
           <label htmlFor={`${idPrefix}-email`} className="block text-sm font-bold mb-2 text-doma-dark">Email</label>
           <input
@@ -121,8 +132,9 @@ export default function ContactForm({
             className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400"
           />
         </div>
+        )}
         <div>
-          <label htmlFor={`${idPrefix}-telefono`} className="block text-sm font-bold mb-2 text-doma-dark">Teléfono</label>
+          <label htmlFor={`${idPrefix}-telefono`} className="block text-sm font-bold mb-2 text-doma-dark">{showEmail ? 'Teléfono' : 'Teléfono (WhatsApp)'}</label>
           <input
             id={`${idPrefix}-telefono`}
             name="telefono"
@@ -142,6 +154,7 @@ export default function ContactForm({
           id={`${idPrefix}-procedimiento`}
           name="procedimiento"
           required
+          defaultValue={defaultProcedure}
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark"
         >
           <option value="">Selecciona una opcion</option>

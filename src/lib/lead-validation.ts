@@ -1,3 +1,5 @@
+import { type ClickId, type ClickIdType, isValidClickId } from './attribution'
+
 export const LEAD_LIMITS = {
   nombre: 100,
   email: 254,
@@ -15,6 +17,7 @@ export interface ValidatedLead {
   mensaje: string
   procedimiento: string
   medico_id: string
+  clickId?: ClickId
   turnstileToken?: string
 }
 
@@ -32,7 +35,12 @@ const ALLOWED_FIELDS = new Set([
   'website',
   'privacyAccepted',
   'cf-turnstile-response',
+  'gclid',
+  'gbraid',
+  'wbraid',
 ])
+
+const CLICK_ID_FIELDS: ClickIdType[] = ['gclid', 'gbraid', 'wbraid']
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -83,10 +91,12 @@ export function validateLeadInput(input: unknown): LeadValidationResult {
     return { success: false, error: 'Ingresa un nombre valido.' }
   }
 
-  const email = readString(input, 'email', LEAD_LIMITS.email)
+  // Email is optional (the Ads landing only asks for name and phone), but it
+  // must be valid when present.
+  const email = input.email === undefined ? '' : readString(input, 'email', LEAD_LIMITS.email, true)
   if (
     email === null ||
-    !/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(email)
+    (email !== '' && !/^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(email))
   ) {
     return { success: false, error: 'Ingresa un email valido.' }
   }
@@ -130,6 +140,17 @@ export function validateLeadInput(input: unknown): LeadValidationResult {
     turnstileToken = rawTurnstileToken
   }
 
+  let clickId: ClickId | undefined
+  for (const type of CLICK_ID_FIELDS) {
+    const value = input[type]
+    if (value === undefined || value === '') continue
+    if (typeof value !== 'string' || !isValidClickId(value)) {
+      return { success: false, error: 'La solicitud contiene datos de campaña no validos.' }
+    }
+    clickId = { type, value }
+    break
+  }
+
   return {
     success: true,
     data: {
@@ -139,6 +160,7 @@ export function validateLeadInput(input: unknown): LeadValidationResult {
       mensaje,
       procedimiento,
       medico_id: medicoId,
+      clickId,
       turnstileToken,
     },
   }

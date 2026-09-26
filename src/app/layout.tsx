@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import AnalyticsConsentBanner from "@/components/AnalyticsConsentBanner";
+import GoogleAdsTag from "@/components/GoogleAdsTag";
 import PageViewTracker from "@/components/PageViewTracker";
 import "./globals.css";
 
@@ -40,6 +41,7 @@ export default function RootLayout({
         <PageViewTracker />
         {children}
         <AnalyticsConsentBanner />
+        <GoogleAdsTag />
       </body>
     </html>
   );

@@ -59,6 +59,7 @@ export default function PrivacidadPage() {
                 <li>Nombre, correo electrónico, teléfono y contenido de consultas.</li>
                 <li>Tratamiento o profesional de interés y datos necesarios para coordinar una evaluación.</li>
                 <li>Datos técnicos limitados de navegación: ruta visitada e identificador aleatorio de sesión, solo si aceptás analytics.</li>
+                <li>Si llegás desde un anuncio de Google, el identificador del clic (gclid) que Google agrega a la dirección, que se guarda en tu navegador hasta 90 días y se envía junto con tu consulta.</li>
                 <li>Información clínica o de salud que brindes durante la atención médica, incluyendo antecedentes, evaluaciones, imágenes y consentimientos cuando corresponda.</li>
               </ul>
               <p className="mt-4 leading-relaxed">
@@ -76,6 +77,7 @@ export default function PrivacidadPage() {
                 <li>Brindar atención y seguimiento médico, gestionar documentación clínica y cumplir obligaciones sanitarias y legales aplicables.</li>
                 <li>Proteger el sitio, prevenir abusos y mantener su funcionamiento seguro.</li>
                 <li>Medir el uso de las páginas y mejorar la experiencia únicamente con tu consentimiento previo para analytics.</li>
+                <li>Medir qué consultas llegan desde nuestros anuncios de Google, únicamente con tu consentimiento previo.</li>
               </ul>
               <p className="mt-4 leading-relaxed">
                 Podés rechazar analytics sin perder acceso al sitio ni a sus
@@ -106,7 +108,30 @@ export default function PrivacidadPage() {
             </section>
 
             <section className="rounded-3xl border border-doma-light/50 bg-white p-7 lg:p-9">
-              <h2 className="text-2xl font-black text-doma-dark">5. Analytics y almacenamiento local</h2>
+              <h2 className="text-2xl font-black text-doma-dark">5. Google Ads y medición de conversiones</h2>
+              <p className="mt-4 leading-relaxed">
+                Si aceptás analytics, el sitio carga la etiqueta de Google Ads
+                (Google LLC) para saber cuándo una consulta o un clic a
+                WhatsApp proviene de nuestros anuncios. Cuando enviás un
+                formulario, tu correo electrónico y teléfono se comparten con
+                Google en forma cifrada (hash) para medir esa conversión
+                (conversiones mejoradas); Google no los recibe en texto legible.
+                Si rechazás analytics, la etiqueta no se carga y no se envía
+                ningún dato a Google. Más información en la{' '}
+                <a
+                  className="font-bold text-doma-violet underline"
+                  href="https://policies.google.com/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  política de privacidad de Google
+                </a>
+                .
+              </p>
+            </section>
+
+            <section className="rounded-3xl border border-doma-light/50 bg-white p-7 lg:p-9">
+              <h2 className="text-2xl font-black text-doma-dark">6. Analytics y almacenamiento local</h2>
               <p className="mt-4 leading-relaxed">
                 El banner guarda tu elección de aceptar o rechazar analytics en
                 el almacenamiento local del navegador. Si aceptás, se crea un
@@ -122,7 +147,7 @@ export default function PrivacidadPage() {
             </section>
 
             <section className="rounded-3xl border border-doma-light/50 bg-white p-7 lg:p-9">
-              <h2 className="text-2xl font-black text-doma-dark">6. Conservación orientativa</h2>
+              <h2 className="text-2xl font-black text-doma-dark">7. Conservación orientativa</h2>
               <p className="mt-4 leading-relaxed">
                 Como criterio preliminar sujeto a validación, las consultas
                 comerciales deberían conservarse hasta 24 meses desde el último
@@ -136,7 +161,7 @@ export default function PrivacidadPage() {
             </section>
 
             <section className="rounded-3xl border border-doma-light/50 bg-white p-7 lg:p-9">
-              <h2 className="text-2xl font-black text-doma-dark">7. Tus derechos</h2>
+              <h2 className="text-2xl font-black text-doma-dark">8. Tus derechos</h2>
               <p className="mt-4 leading-relaxed">
                 Podés solicitar acceso, actualización, rectificación, supresión
                 o confidencialidad de tus datos, o retirar un consentimiento
@@ -149,7 +174,7 @@ export default function PrivacidadPage() {
             </section>
 
             <section className="rounded-3xl border border-doma-light/50 bg-white p-7 lg:p-9">
-              <h2 className="text-2xl font-black text-doma-dark">8. Seguridad y cambios</h2>
+              <h2 className="text-2xl font-black text-doma-dark">9. Seguridad y cambios</h2>
               <p className="mt-4 leading-relaxed">
                 Se deben aplicar controles técnicos y organizativos acordes con
                 la sensibilidad de los datos, aunque ningún sistema garantiza
