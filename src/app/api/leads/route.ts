@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { sendLeadNotification } from '@/lib/lead-notification'
 import { validateLeadInput } from '@/lib/lead-validation'
 import { createSupabaseAdminClient } from '@/lib/supabase-admin'
 
@@ -149,6 +150,11 @@ export async function POST(request: Request) {
     if (error) {
       return errorResponse('No se pudo guardar la consulta. Intenta nuevamente.', 500)
     }
+
+    // The lead is already stored; a failed email must not fail the request.
+    await sendLeadNotification(validation.data).catch((notificationError) => {
+      console.error('Lead notification failed', notificationError)
+    })
 
     return NextResponse.json({ success: true }, { status: 201 })
   } catch {
