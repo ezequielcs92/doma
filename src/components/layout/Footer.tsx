@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Phone, MapPin, Clock } from 'lucide-react'
+import { SITE_ADDRESS } from '@/lib/site'
 
 export default function Footer() {
   return (
@@ -60,7 +61,7 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-white/60 text-sm">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-doma-accent" />
-                <span>AV del Libertador 5990, Belgrano</span>
+                <span>{SITE_ADDRESS}</span>
               </li>
               <li>
                 <a

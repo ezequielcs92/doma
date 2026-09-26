@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import Link from 'next/link'
+import { SITE_ADDRESS } from '@/lib/site'
 
 export default function MedicalFooter() {
   return (
@@ -22,7 +23,7 @@ export default function MedicalFooter() {
             </h4>
             <div className="flex items-start gap-3 text-sm text-doma-muted">
               <MapPin className="w-4 h-4 mt-0.5 text-doma-accent" />
-              <span>Av. del Libertador 5990, Belgrano</span>
+              <span>{SITE_ADDRESS}</span>
             </div>
           </div>
 

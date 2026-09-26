@@ -14,7 +14,7 @@ const treatments = [
       'Definición corporal de alta precisión que permite resaltar la musculatura y mejorar el contorno corporal de forma natural. Utilizamos varias tecnologías logrando resultados más definidos y una recuperación más rápida.',
     features: ['Mayor definición muscular', 'Recuperación más rápida', 'Resultados naturales'],
     cta: 'Consultar con el especialista',
-    image: '/images/treatments/lipoescultura-hd.webp',
+    image: '/images/treatments/lipoescultura-hd-h.webp',
   },
   {
     icon: Sparkles,
@@ -23,7 +23,7 @@ const treatments = [
       'Cirugía que permite eliminar el exceso de piel y grasa abdominal, logrando un abdomen más firme, plano y definido. Ideal para pacientes con flacidez, diástasis o cambios post embarazo.',
     features: ['Técnicas avanzadas', 'Resultados duraderos', 'Definición corporal 360'],
     cta: 'Quiero mi evaluación',
-    image: '/images/treatments/abdominoplastia.webp',
+    image: '/images/treatments/abdominoplastia-h.webp',
   },
   {
     icon: Activity,
@@ -32,7 +32,7 @@ const treatments = [
       'Cirugía integral que permite redefinir el contorno corporal trabajando múltiples zonas en una misma intervención, logrando una silueta más estilizada, armónica y natural. Ideal para pacientes que buscan un cambio corporal completo.',
     features: ['Combinación de técnicas', 'Mayor definición corporal', 'Resultados armónicos'],
     cta: 'Consultar con el especialista',
-    image: '/images/treatments/body-lifting.webp',
+    image: '/images/treatments/body-lifting-h.webp',
   },
   {
     icon: Syringe,
@@ -41,7 +41,7 @@ const treatments = [
       'Procedimientos diseñados para mejorar la forma, el tamaño, volumen y armonía de las mamas, adaptados a las características y objetivos de cada paciente.',
     features: ['Aumento mamario', 'Mastopexia', 'Recambio de implantes'],
     cta: 'Quiero mi evaluación',
-    image: '/images/team/pablo-vega.webp',
+    image: '/images/treatments/cirugia-mamaria-h.webp',
   },
   {
     icon: Droplets,
@@ -50,7 +50,7 @@ const treatments = [
       'Procedimientos diseñados para mejorar la forma, proyección y volumen de los glúteos, logrando un contorno más armónico y natural.',
     features: ['Implantes glúteos', 'Transferencia glútea', 'Resultados naturales'],
     cta: 'Quiero mi evaluación',
-    image: '/images/treatments/cirugia-glutea.webp',
+    image: '/images/treatments/cirugia-glutea-h.webp',
   },
   {
     icon: Eye,
@@ -59,7 +59,7 @@ const treatments = [
       'Procedimientos diseñados para rejuvenecer y armonizar el rostro, mejorando la apariencia sin perder naturalidad.',
     features: ['Blefaroplastia', 'Lifting facial', 'Lifting de cejas'],
     cta: 'Quiero mi evaluación',
-    image: '/images/team/majo-arauz.webp',
+    image: '/images/treatments/cirugia-facial-h.webp',
   },
   {
     icon: Sparkles,
@@ -68,7 +68,7 @@ const treatments = [
       'Tratamientos no quirúrgicos diseñados para mejorar la calidad de la piel, prevenir el envejecimiento y realzar la armonía facial de forma natural.',
     features: ['Ácido hialurónico', 'Toxina botulínica', 'Skinboosters', 'Bioestimuladores'],
     cta: 'Quiero mi evaluación',
-    image: '/images/treatments/medicina-estetica.webp',
+    image: '/images/treatments/medicina-estetica-h.webp',
   },
 ]
 

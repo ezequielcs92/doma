@@ -53,8 +53,8 @@ async function getDoctors(): Promise<TeamDoctor[]> {
       .select('nombre,especialidad,matricula,foto_url,curriculum,slug')
       .order('nombre', { ascending: true })
 
-    if (error || !data) {
-      return []
+    if (error || !data || data.length === 0) {
+      return fallbackDoctors
     }
 
     return (data as Medico[]).map((medico) => ({
@@ -64,9 +64,10 @@ async function getDoctors(): Promise<TeamDoctor[]> {
       image: medico.foto_url,
       credentials: medico.curriculum || [],
       slug: medico.slug,
+      cta: fallbackDoctors.find((doctor) => doctor.slug === medico.slug)?.cta,
     }))
   } catch {
-    return []
+    return fallbackDoctors
   }
 }
 
@@ -115,7 +116,7 @@ export default async function TeamSection() {
                       src={doctor.image}
                       alt={doctor.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-doma-dark/60 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-transparent" />
 

@@ -57,7 +57,9 @@ export async function generateStaticParams() {
     dbSlugs = []
   }
 
-  return dbSlugs
+  return Array.from(
+    new Set([...dbSlugs.map(({ slug }) => slug), ...Object.keys(fallbackMedicos)])
+  ).map((slug) => ({ slug }))
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
@@ -87,7 +89,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   if (medicoError || !medico) {
-    notFound()
+    const fallback = fallbackMedicos[slug]
+    if (!fallback) notFound()
+    return <DoctorLanding medico={fallback} galeria={[]} />
   }
 
   // 2. Obtener galería de resultados para este médico

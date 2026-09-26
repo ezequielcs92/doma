@@ -5,6 +5,8 @@ import Link from 'next/link'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import SectionLabel from '@/components/ui/SectionLabel'
 import Turnstile from '@/components/Turnstile'
+import { trackLeadConversion } from '@/lib/conversion'
+import { SITE_ADDRESS, SITE_MAPS_URL } from '@/lib/site'
 import {
   CheckCircle2,
   Loader2,
@@ -57,6 +59,7 @@ export default function ContactSection() {
             : 'Hubo un error al enviar tu consulta. Por favor intenta de nuevo.'
         throw new Error(message)
       }
+      trackLeadConversion()
       setSuccess(true)
     } catch (submitError) {
       setError(
@@ -121,8 +124,8 @@ export default function ContactSection() {
                 {
                   icon: MapPin,
                   label: 'Dirección',
-                  value: 'AV del Libertador 5990, Belgrano',
-                  href: 'https://www.google.com/maps/search/?api=1&query=Av.+del+Libertador+5990,+Belgrano,+Buenos+Aires',
+                  value: SITE_ADDRESS,
+                  href: SITE_MAPS_URL,
                 },
                 {
                   icon: Clock,

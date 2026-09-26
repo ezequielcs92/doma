@@ -4,8 +4,23 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { CheckCircle2, Loader2, ArrowRight } from 'lucide-react'
 import Turnstile from '@/components/Turnstile'
+import { trackLeadConversion } from '@/lib/conversion'
 
-export default function ContactForm({ medicoId, formTitle, formSubtitle }: { medicoId: string; formTitle?: string; formSubtitle?: string }) {
+interface ContactFormProps {
+  medicoId: string
+  formTitle?: string
+  formSubtitle?: string
+  idPrefix?: string
+  compact?: boolean
+}
+
+export default function ContactForm({
+  medicoId,
+  formTitle,
+  formSubtitle,
+  idPrefix = 'doctor',
+  compact = false,
+}: ContactFormProps) {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -47,6 +62,7 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
             : 'Hubo un error al enviar tus datos. Por favor intenta de nuevo.'
         throw new Error(message)
       }
+      trackLeadConversion()
       setSuccess(true)
     } catch (submitError) {
       setError(
@@ -73,14 +89,14 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative bg-white p-10 rounded-3xl shadow-2xl shadow-doma-violet/5 border border-doma-light/30 space-y-5">
+    <form onSubmit={handleSubmit} className={`relative bg-white ${compact ? 'p-6 sm:p-8 space-y-4' : 'p-10 space-y-5'} rounded-3xl shadow-2xl shadow-doma-violet/5 border border-doma-light/30`}>
       <h3 className="text-2xl font-black text-doma-dark mb-2 text-center">{formTitle || 'Agenda tu evaluación personalizada'}</h3>
       <p className="text-sm text-doma-muted text-center mb-4">{formSubtitle || 'Evaluación médica personalizada según tu caso.'}</p>
 
       <div>
-        <label htmlFor="doctor-nombre" className="block text-sm font-bold mb-2 text-doma-dark">Nombre Completo</label>
+        <label htmlFor={`${idPrefix}-nombre`} className="block text-sm font-bold mb-2 text-doma-dark">Nombre Completo</label>
         <input
-          id="doctor-nombre"
+          id={`${idPrefix}-nombre`}
           name="nombre"
           required
           type="text"
@@ -93,9 +109,9 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="doctor-email" className="block text-sm font-bold mb-2 text-doma-dark">Email</label>
+          <label htmlFor={`${idPrefix}-email`} className="block text-sm font-bold mb-2 text-doma-dark">Email</label>
           <input
-            id="doctor-email"
+            id={`${idPrefix}-email`}
             name="email"
             required
             type="email"
@@ -106,9 +122,9 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
           />
         </div>
         <div>
-          <label htmlFor="doctor-telefono" className="block text-sm font-bold mb-2 text-doma-dark">Teléfono</label>
+          <label htmlFor={`${idPrefix}-telefono`} className="block text-sm font-bold mb-2 text-doma-dark">Teléfono</label>
           <input
-            id="doctor-telefono"
+            id={`${idPrefix}-telefono`}
             name="telefono"
             required
             type="tel"
@@ -121,9 +137,9 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
       </div>
 
       <div>
-        <label htmlFor="doctor-procedimiento" className="block text-sm font-bold mb-2 text-doma-dark">Tratamiento de interes</label>
+        <label htmlFor={`${idPrefix}-procedimiento`} className="block text-sm font-bold mb-2 text-doma-dark">Tratamiento de interes</label>
         <select
-          id="doctor-procedimiento"
+          id={`${idPrefix}-procedimiento`}
           name="procedimiento"
           required
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark"
@@ -141,10 +157,11 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
         </select>
       </div>
 
+      {!compact && (
       <div>
-        <label htmlFor="doctor-mensaje" className="block text-sm font-bold mb-2 text-doma-dark">Tu Consulta</label>
+        <label htmlFor={`${idPrefix}-mensaje`} className="block text-sm font-bold mb-2 text-doma-dark">Tu Consulta</label>
         <textarea
-          id="doctor-mensaje"
+          id={`${idPrefix}-mensaje`}
           name="mensaje"
           rows={3}
           maxLength={2000}
@@ -152,10 +169,11 @@ export default function ContactForm({ medicoId, formTitle, formSubtitle }: { med
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark placeholder:text-gray-400 resize-none"
         ></textarea>
       </div>
+      )}
 
       <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
-        <label htmlFor="doctor-website">Sitio web</label>
-        <input id="doctor-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+        <label htmlFor={`${idPrefix}-website`}>Sitio web</label>
+        <input id={`${idPrefix}-website`} name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <Turnstile key={turnstileVersion} />

@@ -2,12 +2,13 @@
 
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import { ArrowRight, MessageCircle } from 'lucide-react'
+import { WHATSAPP_URL } from '@/lib/site'
 
 export default function CTABanner() {
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-doma-violet to-doma-dark" />
-      <div className="absolute inset-0 bg-[url('/images/team/DOMA.jpg')] bg-cover bg-center opacity-10" />
+      <div className="absolute inset-0 bg-[url('/images/team/DOMA-h.webp')] bg-cover bg-center opacity-10" />
 
       {/* Decorative */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-doma-accent/10 rounded-full blur-[150px] pointer-events-none" />
@@ -43,7 +44,7 @@ export default function CTABanner() {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
-              href="https://wa.me/5491130253305"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary !border-white/30 !text-white hover:!bg-white/10 hover:!text-white flex items-center gap-2"

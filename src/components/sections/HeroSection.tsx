@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowRight, Shield, Award, Star } from 'lucide-react'
+import ContactForm from '@/components/ContactForm'
+import { WHATSAPP_URL } from '@/lib/site'
 
 export default function HeroSection() {
   return (
@@ -13,7 +15,7 @@ export default function HeroSection() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/team/DOMA.jpg"
+          src="/images/team/DOMA-h.webp"
           alt="DOMA Sculpt Center"
           fill
           className="object-cover"
@@ -86,7 +88,12 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.6 }}
               className="flex flex-wrap gap-4 pt-4"
             >
-              <a href="/contacto" className="btn-primary group text-base">
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary group text-base"
+              >
                 Quiero saber si soy candidato/a
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
@@ -118,41 +125,20 @@ export default function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Right side - floating stats card */}
+          {/* Right side - lead form (Google Ads landing) */}
           <motion.div
+            id="evaluacion"
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, delay: 0.5 }}
-            className="hidden lg:flex justify-end"
+            className="flex lg:justify-end scroll-mt-28"
           >
-            <div className="relative">
-              {/* Stats Card */}
-              <div className="glass-card p-8 space-y-6 animate-float bg-doma-dark/80 backdrop-blur-xl border-white/25 shadow-2xl shadow-doma-dark/40">
-                <h3 className="text-white font-extrabold text-2xl leading-none">Nuestro enfoque</h3>
-                <div className="space-y-4">
-                  {[
-                    { value: '01', label: 'Evaluación detallada' },
-                    { value: '02', label: 'Plan personalizado' },
-                    { value: '03', label: 'Seguimiento continuo' },
-                  ].map((stat, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-4 p-3.5 rounded-xl bg-doma-violet/70 border border-doma-light/30"
-                    >
-                      <span className="text-3xl font-black text-doma-accent leading-none min-w-[96px]">
-                        {stat.value}
-                      </span>
-                      <span className="text-white text-base font-semibold leading-tight">
-                        {stat.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Decorative ring */}
-              <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full border-2 border-doma-accent/20 pointer-events-none" />
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full border border-doma-violet/30 pointer-events-none" />
+            <div className="w-full max-w-md">
+              <ContactForm
+                medicoId="web-general"
+                idPrefix="hero"
+                compact
+              />
             </div>
           </motion.div>
         </div>
@@ -163,7 +149,7 @@ export default function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden lg:block"
       >
         <div className="flex flex-col items-center gap-2 text-white/40">
           <span className="text-[10px] uppercase tracking-[0.3em]">Scroll</span>

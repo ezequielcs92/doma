@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Footer from '@/components/layout/Footer'
 import Navbar from '@/components/layout/Navbar'
+import { SITE_ADDRESS_FULL } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Términos y Condiciones | DOMA Sculpt Center',
@@ -36,8 +37,7 @@ export default function TerminosPage() {
               <h2 className="text-2xl font-black text-doma-dark">1. Identificación y aceptación</h2>
               <p className="mt-4 leading-relaxed">
                 El sitio corresponde a DOMA Sculpt Center, con atención informada
-                en Av. del Libertador 5990, Belgrano, Ciudad de Buenos Aires,
-                Argentina. Podés contactarte por medio de{' '}
+                en {SITE_ADDRESS_FULL}. Podés contactarte por medio de{' '}
                 <a className="font-bold text-doma-violet underline" href="mailto:info@domasculpt.com">info@domasculpt.com</a>{' '}
                 o al <a className="font-bold text-doma-violet underline" href="tel:+5491130253305">+54 9 11 3025-3305</a>.
                 No se publican razón social ni CUIT porque esos datos aún no están

@@ -31,7 +31,7 @@ const fallbackBlogPosts: BlogPost[] = [
     title: 'Cómo elegir tu cirujano estético',
     excerpt:
       'Claves médicas y estéticas para tomar una decisión segura antes de cualquier procedimiento.',
-    cover: '/images/team/DOMA.jpg',
+    cover: '/images/team/DOMA-h.webp',
     date: '2026-03-10',
     author: 'Equipo DOMA',
     category: 'Guía',
@@ -54,7 +54,7 @@ const fallbackBlogPosts: BlogPost[] = [
     title: '¿Lipo o abdominoplastia? Cómo saber cuál necesitás',
     excerpt:
       'Es una de las dudas más frecuentes en consulta. Aunque ambos procedimientos trabajan el abdomen, no son lo mismo.',
-    cover: '/images/team/DOMA_Personal.jpg',
+    cover: '/images/team/DOMA_Personal-h.webp',
     date: '2026-03-06',
     author: 'Dr. Pablo Vega',
     category: 'Procedimientos',
@@ -80,7 +80,7 @@ const fallbackBlogPosts: BlogPost[] = [
     title: 'Botox y ácido hialurónico: ¿cuál es mejor para vos?',
     excerpt:
       'Es una de las dudas más comunes en medicina estética. Aunque muchas veces se confunden, cumplen funciones diferentes.',
-    cover: '/images/team/DOMA_Personal-2.jpg',
+    cover: '/images/team/DOMA_Personal-2-h.webp',
     date: '2026-02-28',
     author: 'Dra. Majo Arauz',
     category: 'Medicina Estética',
@@ -117,7 +117,7 @@ const fallbackBlogPosts: BlogPost[] = [
     title: '¿Qué es un Mommy Makeover y cuándo conviene hacerlo?',
     excerpt:
       'Después del embarazo, muchas mujeres notan cambios en su cuerpo que no logran revertir solo con ejercicio o alimentación.',
-    cover: '/images/team/DOMA_Personal-3.jpg',
+    cover: '/images/team/DOMA_Personal-3-h.webp',
     date: '2026-02-20',
     author: 'Dr. Pablo Vega',
     category: 'Procedimientos',
@@ -152,7 +152,7 @@ const fallbackBlogPosts: BlogPost[] = [
     title: 'Resultados naturales en medicina estética: qué significa realmente',
     excerpt:
       'Hoy el objetivo de la medicina estética no es transformar el rostro, sino realzar y armonizar sin perder la naturalidad.',
-    cover: '/images/team/DOMA_Personal-4.jpg',
+    cover: '/images/team/DOMA_Personal-4-h.webp',
     date: '2026-02-15',
     author: 'Dra. Majo Arauz',
     category: 'Medicina Estética',
@@ -179,7 +179,7 @@ function normalizeBlogPost(item: Record<string, unknown>): BlogPost {
     slug: String(item.slug || ''),
     title: String(item.title || ''),
     excerpt: String(item.excerpt || ''),
-    cover: String(item.cover || '/images/team/DOMA.jpg'),
+    cover: String(item.cover || '/images/team/DOMA-h.webp'),
     date: String(item.date || new Date().toISOString().slice(0, 10)),
     author: String(item.author || 'Equipo DOMA'),
     category: String(item.category || 'Guia'),
@@ -192,11 +192,15 @@ function normalizeBlogPost(item: Record<string, unknown>): BlogPost {
   }
 }
 
+function getSortedFallbackPosts() {
+  return [...fallbackBlogPosts].sort((a, b) =>
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+}
+
 export async function getAllBlogPosts() {
   if (!isSupabaseConfigured) {
-    return [...fallbackBlogPosts].sort((a, b) =>
-      new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
+    return getSortedFallbackPosts()
   }
 
   try {
@@ -205,13 +209,13 @@ export async function getAllBlogPosts() {
       .select('*')
       .order('date', { ascending: false })
 
-    if (error || !data) {
-      return []
+    if (error || !data || data.length === 0) {
+      return getSortedFallbackPosts()
     }
 
     return data.map(normalizeBlogPost)
   } catch {
-    return []
+    return getSortedFallbackPosts()
   }
 }
 
@@ -228,11 +232,11 @@ export async function getBlogPostBySlug(slug: string) {
       .maybeSingle()
 
     if (error || !data) {
-      return undefined
+      return fallbackBlogPosts.find((post) => post.slug === slug)
     }
 
     return normalizeBlogPost(data)
   } catch {
-    return undefined
+    return fallbackBlogPosts.find((post) => post.slug === slug)
   }
 }

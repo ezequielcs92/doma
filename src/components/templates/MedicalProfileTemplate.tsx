@@ -17,6 +17,7 @@ import {
   Quote,
   MessageCircle,
 } from 'lucide-react'
+import { WHATSAPP_URL } from '@/lib/site'
 
 type MedicalProfileTemplateProps = {
   medico: Medico
@@ -366,7 +367,7 @@ export default function MedicalProfileTemplate({
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {(medico.curriculum?.length > 0 ? medico.curriculum : config.bullets).map((item, index) => (
+                  {(config.bullets.length > 0 ? config.bullets : medico.curriculum || []).map((item, index) => (
                     <div
                       key={index}
                       className="flex gap-3 items-start p-4 rounded-2xl bg-surface border border-doma-light/30 hover:border-doma-accent/30 hover:shadow-md transition-all"
@@ -474,7 +475,7 @@ export default function MedicalProfileTemplate({
         {/* ─── CTA Final ─── */}
         <section className="relative py-24 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-doma-violet to-doma-dark" />
-          <div className="absolute inset-0 bg-[url('/images/team/DOMA.jpg')] bg-cover bg-center opacity-10" />
+          <div className="absolute inset-0 bg-[url('/images/team/DOMA-h.webp')] bg-cover bg-center opacity-10" />
           <div className="absolute top-0 right-0 w-96 h-96 bg-doma-accent/10 rounded-full blur-[150px] pointer-events-none" />
 
           <div className="relative max-w-4xl mx-auto px-6 text-center space-y-8">
@@ -505,7 +506,7 @@ export default function MedicalProfileTemplate({
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
-                  href="https://wa.me/5491130253305"
+                  href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-secondary !border-white/30 !text-white hover:!bg-white/10 hover:!text-white flex items-center gap-2"
