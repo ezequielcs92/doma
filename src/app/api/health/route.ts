@@ -5,14 +5,10 @@ import { isSupabaseConfigured, supabase } from '@/lib/supabase'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-// Called daily by Vercel Cron (see vercel.json). The query keeps the Supabase
-// free-tier project active so it is not paused for inactivity.
-export async function GET(request: Request) {
-  const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && request.headers.get('authorization') !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
+// Called daily by GitHub Actions (.github/workflows/supabase-keepalive.yml).
+// The query keeps the Supabase free-tier project active so it is not paused
+// for inactivity. It exposes no data, so it needs no authentication.
+export async function GET() {
   if (!isSupabaseConfigured) {
     return NextResponse.json({ ok: false, database: 'not-configured' }, { status: 503 })
   }
