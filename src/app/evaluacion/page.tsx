@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import ContactForm from '@/components/ContactForm'
 import WhatsAppButton from '@/components/landing/WhatsAppButton'
+import HeroBackground from '@/components/ui/HeroBackground'
 import { findLandingTreatment, LANDING_TREATMENTS } from '@/lib/landing'
 import { SITE_ADDRESS } from '@/lib/site'
 
@@ -113,13 +114,7 @@ export default async function EvaluacionPage({
         {/* Hero + form */}
         <section className="relative overflow-hidden bg-doma-dark">
           <div className="absolute inset-0">
-            <Image
-              src="/images/team/DOMA-h.webp"
-              alt=""
-              fill
-              priority
-              className="object-cover"
-            />
+            <HeroBackground />
             <div className="absolute inset-0 bg-gradient-to-r from-doma-dark/95 via-doma-dark/85 to-doma-dark/60" />
           </div>
 

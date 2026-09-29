@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import HeroBackground from '@/components/ui/HeroBackground'
 import { motion } from 'framer-motion'
 import { ArrowRight, Shield, Award, Star } from 'lucide-react'
 import ContactForm from '@/components/ContactForm'
@@ -14,14 +14,7 @@ export default function HeroSection() {
     >
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/team/DOMA-h.webp"
-          alt="DOMA Sculpt Center"
-          fill
-          className="object-cover"
-          priority
-          quality={90}
-        />
+        <HeroBackground alt="DOMA Sculpt Center" />
         <div className="absolute inset-0 bg-gradient-to-r from-doma-dark/95 via-doma-dark/80 to-doma-dark/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-doma-dark/60 via-transparent to-transparent" />
       </div>

@@ -54,7 +54,7 @@ export default async function BlogPostPage({
           </div>
 
           <div className="relative h-72 md:h-96 rounded-3xl overflow-hidden mb-10">
-            <Image src={post.cover} alt={post.title} fill className="object-cover" />
+            <Image src={post.cover} alt={post.title} fill className="object-cover object-[center_30%]" />
           </div>
 
           <div className="space-y-6">

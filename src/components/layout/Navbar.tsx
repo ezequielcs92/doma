@@ -44,7 +44,7 @@ function NavbarContent({ pathname }: { pathname: string }) {
     }
   }, [mobileOpen])
 
-  const useSolidStyle = scrolled || pathname !== '/'
+  const useSolidStyle = scrolled || mobileOpen || pathname !== '/'
 
   return (
     <>
@@ -64,7 +64,7 @@ function NavbarContent({ pathname }: { pathname: string }) {
               alt="DOMA Sculpt Center"
               width={140}
               height={40}
-              className="h-8 w-auto"
+              className={cn('h-8 w-auto transition-[filter] duration-500', !useSolidStyle && 'brightness-0 invert')}
               priority
             />
           </Link>
@@ -91,7 +91,7 @@ function NavbarContent({ pathname }: { pathname: string }) {
           <div className="flex items-center gap-4">
             <Link
               href="/contacto"
-              className="hidden md:inline-flex btn-primary !py-2.5 !px-6 !text-sm"
+              className="!hidden md:!inline-flex btn-primary !py-2.5 !px-6 !text-sm"
             >
               Agendar Consulta
             </Link>

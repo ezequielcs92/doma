@@ -195,7 +195,9 @@ export default function ResultsSection() {
                 <div className="p-6 flex justify-between items-center">
                   <div>
                     <h4 className="font-bold text-doma-dark">{result.title}</h4>
-                    <p className="text-sm text-doma-muted">{result.category}</p>
+                    {result.category !== result.title && (
+                      <p className="text-sm text-doma-muted">{result.category}</p>
+                    )}
                   </div>
                   <button
                     onClick={(event) => {

@@ -149,7 +149,7 @@ export default function ContactForm({
       </div>
 
       <div>
-        <label htmlFor={`${idPrefix}-procedimiento`} className="block text-sm font-bold mb-2 text-doma-dark">Tratamiento de interes</label>
+        <label htmlFor={`${idPrefix}-procedimiento`} className="block text-sm font-bold mb-2 text-doma-dark">Tratamiento de interés</label>
         <select
           id={`${idPrefix}-procedimiento`}
           name="procedimiento"
@@ -157,7 +157,7 @@ export default function ContactForm({
           defaultValue={defaultProcedure}
           className="w-full px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-doma-accent/50 focus:border-doma-accent transition-all bg-surface/50 text-doma-dark"
         >
-          <option value="">Selecciona una opcion</option>
+          <option value="">Seleccioná una opción</option>
           <option value="Lipoescultura HD">Lipoescultura HD</option>
           <option value="Abdominoplastia">Abdominoplastia</option>
           <option value="Body Lifting">Body Lifting</option>

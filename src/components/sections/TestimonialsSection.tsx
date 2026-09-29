@@ -59,7 +59,7 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Desktop: Grid */}
-        <div className="hidden md:grid grid-cols-2 gap-6">
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <AnimatedSection key={i} delay={0.1 * i}>
               <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-doma-accent/30 hover:bg-white/8 transition-all duration-300 h-full flex flex-col">

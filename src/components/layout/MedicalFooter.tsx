@@ -12,14 +12,14 @@ export default function MedicalFooter() {
               DOMA Sculpt Center
             </h4>
             <p className="text-sm text-doma-muted leading-relaxed">
-              Medicina y cirugia estetica avanzada con estandares de excelencia
-              medica y acompanamiento personalizado.
+              Medicina y cirugía estética avanzada con estándares de excelencia
+              médica y acompañamiento personalizado.
             </p>
           </div>
 
           <div>
             <h4 className="text-sm font-black uppercase tracking-widest text-doma-violet mb-4">
-              Direccion
+              Dirección
             </h4>
             <div className="flex items-start gap-3 text-sm text-doma-muted">
               <MapPin className="w-4 h-4 mt-0.5 text-doma-accent" />
@@ -42,7 +42,7 @@ export default function MedicalFooter() {
               </a>
               <div className="flex items-center gap-3 text-doma-muted">
                 <Clock className="w-4 h-4 text-doma-accent" />
-                <span>Lun-Vie 11:00 a 19:00</span>
+                <span>Lunes a viernes de 11:00am a 19:00hs</span>
               </div>
             </div>
           </div>

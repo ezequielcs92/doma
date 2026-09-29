@@ -17,18 +17,18 @@ export default function NosotrosPage() {
                 Nuestra Identidad
               </p>
               <h2 className="mt-5 text-4xl lg:text-5xl font-black text-doma-dark leading-tight">
-                Mision y Vision
+                Misión y Visión
               </h2>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <article className="rounded-3xl bg-white border border-doma-light/50 shadow-lg shadow-doma-light/20 p-8 lg:p-10">
                 <h3 className="text-2xl font-extrabold text-doma-dark mb-4">
-                  Mision
+                  Misión
                 </h3>
                 <p className="text-doma-muted text-base leading-relaxed">
-                  Brindar soluciones esteticas de alta calidad con enfoque
-                  medico, humano y personalizado, combinando tecnologia,
+                  Brindar soluciones estéticas de alta calidad con enfoque
+                  médico, humano y personalizado, combinando tecnología,
                   seguridad y excelencia profesional para que cada paciente
                   logre resultados naturales y sostenibles en el tiempo.
                 </p>
@@ -36,13 +36,13 @@ export default function NosotrosPage() {
 
               <article className="rounded-3xl bg-doma-dark border border-doma-violet/30 shadow-lg shadow-doma-dark/30 p-8 lg:p-10">
                 <h3 className="text-2xl font-extrabold text-white mb-4">
-                  Vision
+                  Visión
                 </h3>
                 <p className="text-white/80 text-base leading-relaxed">
-                  Ser el centro referente en cirugia y medicina estetica en
-                  Argentina y la region, reconocido por su innovacion, etica
+                  Ser el centro referente en cirugía y medicina estética en
+                  Argentina y la región, reconocido por su innovación, ética
                   profesional y resultados de excelencia, elevando los
-                  estandares de atencion integral en cada experiencia.
+                  estándares de atención integral en cada experiencia.
                 </p>
               </article>
             </div>

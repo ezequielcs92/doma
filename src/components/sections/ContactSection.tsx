@@ -94,7 +94,7 @@ export default function ContactSection() {
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <h2 className="text-4xl lg:text-5xl font-black text-doma-dark leading-tight">
-              Dá el primer paso hacia
+              Da el primer paso hacia
               <br />
               <span className="gradient-text">tu transformación</span>
             </h2>

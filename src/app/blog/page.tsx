@@ -39,7 +39,7 @@ export default async function BlogPage() {
                     src={post.cover}
                     alt={post.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover object-[center_30%] transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-7">
@@ -60,7 +60,7 @@ export default async function BlogPage() {
                     href={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-bold text-doma-violet hover:text-doma-accent transition-colors"
                   >
-                    Leer articulo
+                    Leer artículo
                     <span aria-hidden>→</span>
                   </Link>
                 </div>
