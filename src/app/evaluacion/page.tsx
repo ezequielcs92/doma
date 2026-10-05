@@ -16,7 +16,10 @@ import {
   Stethoscope,
 } from 'lucide-react'
 import ContactForm from '@/components/ContactForm'
+import ScrollProgress from '@/components/landing/ScrollProgress'
+import StickyCta from '@/components/landing/StickyCta'
 import WhatsAppButton from '@/components/landing/WhatsAppButton'
+import AnimatedSection from '@/components/ui/AnimatedSection'
 import HeroBackground from '@/components/ui/HeroBackground'
 import { findLandingTreatment, LANDING_TREATMENTS } from '@/lib/landing'
 import { SITE_ADDRESS } from '@/lib/site'
@@ -162,6 +165,8 @@ export default async function EvaluacionPage({ searchParams }: Props) {
 
   return (
     <div className="pb-24 lg:pb-0">
+      <ScrollProgress />
+
       {/* Header: logo and direct contact, no navigation */}
       <header className="absolute inset-x-0 top-0 z-20">
         <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between gap-4">
@@ -203,10 +208,13 @@ export default async function EvaluacionPage({ searchParams }: Props) {
 
           <div className="relative max-w-7xl mx-auto px-6 pt-28 pb-16 lg:pt-36 lg:pb-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-7">
+              <AnimatedSection direction="down">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-bold uppercase tracking-widest">
-                <span className="w-2 h-2 rounded-full bg-doma-accent" />
+                <span className="w-2 h-2 rounded-full bg-doma-accent animate-pulse" />
                 {selected ? 'DOMA Sculpt Center · Belgrano, CABA' : 'Cirugía plástica y medicina estética · Belgrano'}
               </span>
+              </AnimatedSection>
+              <AnimatedSection delay={0.1}>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.05] tracking-tight">
                 {selected ? (
                   <>
@@ -220,26 +228,31 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                   </>
                 )}
               </h1>
+              </AnimatedSection>
+              <AnimatedSection delay={0.2}>
               <p className="text-lg text-white/75 max-w-lg leading-relaxed">
                 {selected
                   ? selected.description
                   : 'Evaluamos tu caso y definimos el mejor camino para lograr el resultado que buscás, con un enfoque médico, tecnología avanzada y seguimiento personalizado.'}
               </p>
+              </AnimatedSection>
               <ul className="space-y-3">
                 {(selected
                   ? selected.highlights
                   : ['Evaluación médica personalizada', 'Consultas virtuales y presenciales', 'Cirujanos plásticos matriculados']
-                ).map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-white/85">
-                    <CheckCircle2 className="w-5 h-5 text-doma-accent shrink-0" />
-                    {item}
+                ).map((item, index) => (
+                  <li key={item}>
+                    <AnimatedSection direction="right" delay={0.3 + index * 0.1} className="flex items-center gap-3 text-white/85">
+                      <CheckCircle2 className="w-5 h-5 text-doma-accent shrink-0" />
+                      {item}
+                    </AnimatedSection>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div id="formulario" className="flex lg:justify-end scroll-mt-6">
-              <div className="w-full max-w-md">
+            <div id="formulario" data-landing-form className="flex lg:justify-end scroll-mt-6">
+              <AnimatedSection direction="left" delay={0.25} className="w-full max-w-md">
                 <ContactForm
                   key={`top-${selected?.slug ?? 'general'}`}
                   medicoId="web-general"
@@ -250,7 +263,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                   formSubtitle="Evaluación inicial sin cargo, virtual o presencial."
                   footnote={RESPONSE_NOTE}
                 />
-              </div>
+              </AnimatedSection>
             </div>
           </div>
         </section>
@@ -258,14 +271,28 @@ export default async function EvaluacionPage({ searchParams }: Props) {
         {/* Trust bar */}
         <section className="bg-doma-dark border-t border-white/10">
           <ul className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {trustItems.map((item) => (
-              <li key={item.text} className="flex items-center gap-2.5 text-sm font-semibold text-white/85">
-                <item.icon className="w-5 h-5 text-doma-accent shrink-0" />
-                {item.text}
+            {trustItems.map((item, index) => (
+              <li key={item.text}>
+                <AnimatedSection delay={index * 0.08} className="flex items-center gap-2.5 text-sm font-semibold text-white/85">
+                  <item.icon className="w-5 h-5 text-doma-accent shrink-0" />
+                  {item.text}
+                </AnimatedSection>
               </li>
             ))}
           </ul>
         </section>
+
+        {/* Treatments marquee: decorative, the real list comes below */}
+        <div className="overflow-hidden bg-doma-violet py-3" aria-hidden>
+          <div className="animate-marquee flex w-max gap-10 whitespace-nowrap text-sm font-bold uppercase tracking-widest text-white/80">
+            {[...LANDING_TREATMENTS, ...LANDING_TREATMENTS].map((treatment, index) => (
+              <span key={`${treatment.slug}-${index}`} className="flex items-center gap-10">
+                {treatment.name}
+                <span className="h-1.5 w-1.5 rounded-full bg-doma-accent" />
+              </span>
+            ))}
+          </div>
+        </div>
 
         {/* How it works */}
         <section className="py-16 lg:py-20 bg-white">
@@ -273,12 +300,21 @@ export default async function EvaluacionPage({ searchParams }: Props) {
             <h2 className="text-3xl lg:text-4xl font-black text-doma-dark text-center mb-12">
               Cómo es el proceso
             </h2>
-            <ol className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <ol className="relative grid grid-cols-1 md:grid-cols-3 gap-6">
               {steps.map((step, index) => (
-                <li key={step.title} className="rounded-3xl bg-surface p-8 border border-doma-light/40">
-                  <span className="text-4xl font-black text-doma-accent">0{index + 1}</span>
-                  <h3 className="mt-3 text-xl font-black text-doma-dark">{step.title}</h3>
-                  <p className="mt-2 text-doma-muted leading-relaxed">{step.text}</p>
+                <li key={step.title}>
+                  <AnimatedSection delay={index * 0.15} className="h-full">
+                    <div className="group relative h-full rounded-3xl bg-surface p-8 border border-doma-light/40 transition-all duration-300 hover:-translate-y-1.5 hover:border-doma-accent/60 hover:shadow-xl hover:shadow-doma-violet/10">
+                      <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-doma-dark text-2xl font-black text-doma-accent transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                        0{index + 1}
+                      </span>
+                      <h3 className="mt-5 text-xl font-black text-doma-dark">{step.title}</h3>
+                      <p className="mt-2 text-doma-muted leading-relaxed">{step.text}</p>
+                      {index < steps.length - 1 && (
+                        <ArrowRight className="hidden md:block absolute -right-5 top-12 z-10 h-6 w-6 text-doma-accent" />
+                      )}
+                    </div>
+                  </AnimatedSection>
                 </li>
               ))}
             </ol>
@@ -296,7 +332,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
           <div className="max-w-7xl mx-auto px-6">
             {selected ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-                <div className="rounded-3xl bg-white p-8 lg:p-10 border border-doma-accent/40 shadow-lg">
+                <AnimatedSection direction="right" className="rounded-3xl bg-white p-8 lg:p-10 border border-doma-accent/40 shadow-lg">
                   <p className="text-doma-accent font-bold text-xs uppercase tracking-widest mb-3">Tu consulta</p>
                   <h2 className="text-3xl font-black text-doma-dark mb-4">{selected.name}</h2>
                   <p className="text-doma-muted leading-relaxed mb-6">{selected.description}</p>
@@ -312,7 +348,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                     Quiero mi evaluación
                     <ArrowRight className="w-5 h-5" />
                   </a>
-                </div>
+                </AnimatedSection>
                 <div>
                   <h2 className="text-2xl font-black text-doma-dark mb-2">Otros tratamientos</h2>
                   <p className="text-doma-muted mb-6">Si tu consulta es por otro tratamiento, elegilo acá.</p>
@@ -337,12 +373,16 @@ export default async function EvaluacionPage({ searchParams }: Props) {
         {/* Why DOMA */}
         <section className="py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {reasons.map((reason) => (
-              <div key={reason.title} className="rounded-3xl bg-surface p-8 border border-doma-light/40">
-                <reason.icon className="w-8 h-8 text-doma-accent mb-4" />
-                <h2 className="text-xl font-black text-doma-dark mb-2">{reason.title}</h2>
-                <p className="text-doma-muted leading-relaxed">{reason.text}</p>
-              </div>
+            {reasons.map((reason, index) => (
+              <AnimatedSection key={reason.title} delay={index * 0.12} className="h-full">
+                <div className="group h-full rounded-3xl bg-surface p-8 border border-doma-light/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-doma-violet/10">
+                  <span className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-doma-accent/10 transition-all duration-300 group-hover:bg-doma-accent group-hover:scale-110">
+                    <reason.icon className="w-7 h-7 text-doma-accent transition-colors duration-300 group-hover:text-white" />
+                  </span>
+                  <h2 className="text-xl font-black text-doma-dark mb-2">{reason.title}</h2>
+                  <p className="text-doma-muted leading-relaxed">{reason.text}</p>
+                </div>
+              </AnimatedSection>
             ))}
           </div>
         </section>
@@ -354,10 +394,16 @@ export default async function EvaluacionPage({ searchParams }: Props) {
               Nuestro equipo médico
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {orderedDoctors.map((doctor) => (
-                <div key={doctor.slug} className="rounded-3xl overflow-hidden border border-doma-light/40 bg-white">
-                  <div className="relative aspect-[4/3]">
-                    <Image src={doctor.image} alt={doctor.name} fill className="object-cover object-top" />
+              {orderedDoctors.map((doctor, index) => (
+                <AnimatedSection key={doctor.slug} direction={index === 0 ? 'right' : 'left'} delay={index * 0.1}>
+                <div className="group rounded-3xl overflow-hidden border border-doma-light/40 bg-white transition-shadow duration-500 hover:shadow-2xl hover:shadow-doma-violet/15">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={doctor.image}
+                      alt={doctor.name}
+                      fill
+                      className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
                   </div>
                   <div className="p-6 space-y-3">
                     <p className="text-doma-accent font-bold text-xs uppercase tracking-widest">{doctor.specialty}</p>
@@ -376,6 +422,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                     </Link>
                   </div>
                 </div>
+                </AnimatedSection>
               ))}
             </div>
           </div>
@@ -388,8 +435,9 @@ export default async function EvaluacionPage({ searchParams }: Props) {
               Lo que dicen nuestras pacientes
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial) => (
-                <figure key={testimonial.name} className="rounded-3xl bg-surface p-8 border border-doma-light/40">
+              {testimonials.map((testimonial, index) => (
+                <AnimatedSection key={testimonial.name} delay={index * 0.12} className="h-full">
+                <figure className="h-full rounded-3xl bg-surface p-8 border border-doma-light/40 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-doma-violet/10">
                   <div className="flex gap-1 mb-4" aria-label="5 estrellas">
                     {Array.from({ length: 5 }).map((_, index) => (
                       <Star key={index} className="w-4 h-4 fill-doma-accent text-doma-accent" />
@@ -398,6 +446,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                   <blockquote className="text-doma-dark leading-relaxed">“{testimonial.text}”</blockquote>
                   <figcaption className="mt-4 text-sm font-bold text-doma-muted">{testimonial.name}</figcaption>
                 </figure>
+                </AnimatedSection>
               ))}
             </div>
             <div className="text-center mt-10">
@@ -417,14 +466,16 @@ export default async function EvaluacionPage({ searchParams }: Props) {
           <div className="max-w-3xl mx-auto px-6">
             <h2 className="text-3xl lg:text-4xl font-black text-doma-dark text-center mb-10">Preguntas frecuentes</h2>
             <div className="space-y-3">
-              {faqs.map((faq) => (
-                <details key={faq.question} className="group rounded-2xl bg-white border border-doma-light/40 px-6">
+              {faqs.map((faq, index) => (
+                <AnimatedSection key={faq.question} delay={index * 0.06}>
+                <details className="group rounded-2xl bg-white border border-doma-light/40 px-6 transition-colors duration-300 hover:border-doma-accent/60 open:border-doma-accent/60 open:shadow-md">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-bold text-doma-dark [&::-webkit-details-marker]:hidden">
                     {faq.question}
                     <ChevronDown className="w-5 h-5 shrink-0 text-doma-violet transition-transform group-open:rotate-180" />
                   </summary>
-                  <p className="pb-5 text-doma-muted leading-relaxed">{faq.answer}</p>
+                  <p className="faq-answer pb-5 text-doma-muted leading-relaxed">{faq.answer}</p>
                 </details>
+                </AnimatedSection>
               ))}
             </div>
           </div>
@@ -433,7 +484,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
         {/* Final CTA with a second form */}
         <section className="py-16 lg:py-20 bg-doma-dark">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 text-center lg:text-left">
+            <AnimatedSection direction="right" className="space-y-6 text-center lg:text-left">
               <h2 className="text-3xl lg:text-4xl font-black text-white">
                 Empezá tu cambio con un equipo especializado
               </h2>
@@ -458,9 +509,9 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                   Llamar
                 </a>
               </div>
-            </div>
-            <div className="flex justify-center lg:justify-end">
-              <div className="w-full max-w-md">
+            </AnimatedSection>
+            <div data-landing-form className="flex justify-center lg:justify-end">
+              <AnimatedSection direction="left" delay={0.15} className="w-full max-w-md">
                 <ContactForm
                   key={`bottom-${selected?.slug ?? 'general'}`}
                   medicoId="web-general"
@@ -471,7 +522,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                   formSubtitle="Evaluación inicial sin cargo, virtual o presencial."
                   footnote={RESPONSE_NOTE}
                 />
-              </div>
+              </AnimatedSection>
             </div>
           </div>
         </section>
@@ -507,18 +558,7 @@ export default async function EvaluacionPage({ searchParams }: Props) {
         </div>
       </footer>
 
-      {/* Mobile sticky actions */}
-      <div className="fixed inset-x-0 bottom-0 z-50 lg:hidden bg-white/95 backdrop-blur border-t border-doma-light/60 p-3 flex gap-3">
-        <a href="#formulario" className="btn-primary flex-1 !py-3 !px-4 !text-sm">
-          Solicitar evaluación
-        </a>
-        <WhatsAppButton
-          message={whatsappMessage}
-          className="rounded-full bg-[#25D366] text-white font-bold !py-3 px-4 text-sm"
-        >
-          WhatsApp
-        </WhatsAppButton>
-      </div>
+      <StickyCta whatsappMessage={whatsappMessage} />
     </div>
   )
 }
@@ -538,7 +578,7 @@ function TreatmentLinks({
         <li key={treatment.slug}>
           <Link
             href={`/evaluacion?tratamiento=${treatment.slug}#formulario`}
-            className="group flex h-full items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 border border-doma-light/40 hover:border-doma-accent hover:shadow-md transition-all"
+            className="group flex h-full items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 border border-doma-light/40 transition-all duration-300 hover:-translate-y-1 hover:border-doma-accent hover:shadow-lg hover:shadow-doma-violet/10"
           >
             <span>
               <span className="block font-black text-doma-dark">{treatment.name}</span>
