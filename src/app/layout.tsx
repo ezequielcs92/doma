@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import AnalyticsConsentBanner from "@/components/AnalyticsConsentBanner";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import GoogleAdsTag from "@/components/GoogleAdsTag";
 import PageViewTracker from "@/components/PageViewTracker";
 import "./globals.css";
@@ -40,6 +42,10 @@ export default function RootLayout({
       <body className={`${inter.variable} font-mont antialiased`}>
         <PageViewTracker />
         {children}
+        {/* useSearchParams needs a Suspense boundary so pages stay static */}
+        <Suspense fallback={null}>
+          <FloatingWhatsApp />
+        </Suspense>
         <AnalyticsConsentBanner />
         <GoogleAdsTag />
       </body>
