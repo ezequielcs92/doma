@@ -1,6 +1,6 @@
-import { Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock, Instagram } from 'lucide-react'
 import Link from 'next/link'
-import { SITE_ADDRESS, SITE_EMAIL } from '@/lib/site'
+import { SITE_ADDRESS, SITE_EMAIL, SITE_INSTAGRAM_HANDLE, SITE_INSTAGRAM_URL } from '@/lib/site'
 
 export default function MedicalFooter() {
   return (
@@ -51,9 +51,15 @@ export default function MedicalFooter() {
             <h4 className="text-sm font-black uppercase tracking-widest text-doma-violet mb-4">
               Redes
             </h4>
-            <p className="text-sm leading-relaxed text-doma-muted">
-              Consultas y turnos por los canales de contacto publicados.
-            </p>
+            <a
+              href={SITE_INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 text-sm text-doma-muted hover:text-doma-violet transition-colors"
+            >
+              <Instagram className="w-4 h-4 text-doma-accent" />
+              {SITE_INSTAGRAM_HANDLE}
+            </a>
           </div>
         </div>
 

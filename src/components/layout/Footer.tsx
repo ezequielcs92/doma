@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Phone, MapPin, Clock } from 'lucide-react'
-import { SITE_ADDRESS } from '@/lib/site'
+import { Phone, MapPin, Clock, Instagram } from 'lucide-react'
+import { SITE_ADDRESS, SITE_INSTAGRAM_HANDLE, SITE_INSTAGRAM_URL } from '@/lib/site'
 
 export default function Footer() {
   return (
@@ -86,7 +86,18 @@ export default function Footer() {
             <h4 className="font-bold text-doma-accent mb-6 text-sm uppercase tracking-widest">
               Seguinos
             </h4>
-            <p className="text-sm leading-relaxed text-white/60">
+            <a
+              href={SITE_INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 text-sm font-semibold text-white/80 hover:text-white transition-colors"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 border border-white/15 transition-colors group-hover:bg-doma-accent group-hover:border-doma-accent">
+                <Instagram className="w-5 h-5" />
+              </span>
+              {SITE_INSTAGRAM_HANDLE}
+            </a>
+            <p className="mt-5 text-sm leading-relaxed text-white/60">
               Consultas y turnos por teléfono, correo electrónico o WhatsApp.
             </p>
             <div className="mt-8 p-4 rounded-2xl bg-white/5 border border-white/10">

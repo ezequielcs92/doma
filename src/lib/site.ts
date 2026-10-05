@@ -4,9 +4,10 @@ export const SITE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${
   `${SITE_ADDRESS}, Buenos Aires`
 )}`
 
-// TODO: domasculpt.com does not exist, so this address bounces. Replace it
-// with the real inbox as soon as the client confirms it.
-export const SITE_EMAIL = 'info@domasculpt.com'
+export const SITE_EMAIL = 'domasculpcenter@gmail.com'
+
+export const SITE_INSTAGRAM_URL = 'https://www.instagram.com/domasculptcenter/'
+export const SITE_INSTAGRAM_HANDLE = '@domasculptcenter'
 
 export const WHATSAPP_URL = 'https://wa.me/5491130253305'
 
