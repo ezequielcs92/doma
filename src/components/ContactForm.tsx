@@ -16,6 +16,7 @@ interface ContactFormProps {
   compact?: boolean
   showEmail?: boolean
   defaultProcedure?: string
+  footnote?: string
 }
 
 export default function ContactForm({
@@ -26,6 +27,7 @@ export default function ContactForm({
   compact = false,
   showEmail = true,
   defaultProcedure = '',
+  footnote,
 }: ContactFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -211,6 +213,8 @@ export default function ContactForm({
           </>
         )}
       </button>
+
+      {footnote && <p className="text-center text-xs font-semibold text-doma-muted">{footnote}</p>}
 
       <label className="flex items-start gap-3 text-xs leading-relaxed text-gray-500">
         <input

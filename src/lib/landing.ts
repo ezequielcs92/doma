@@ -8,6 +8,8 @@ export type LandingTreatment = {
   formValue: string
   description: string
   highlights: string[]
+  // Slug of the doctor who performs it (shown first on the landing).
+  doctor: 'pablo-vega' | 'majo-arauz'
 }
 
 export const LANDING_TREATMENTS: LandingTreatment[] = [
@@ -18,6 +20,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Definición corporal de alta precisión que permite resaltar la musculatura y mejorar el contorno corporal de forma natural.',
     highlights: ['Mayor definición muscular', 'Recuperación más rápida', 'Resultados naturales'],
+    doctor: 'pablo-vega',
   },
   {
     slug: 'abdominoplastia',
@@ -26,6 +29,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Elimina el exceso de piel y grasa abdominal para lograr un abdomen más firme y plano. Ideal para flacidez, diástasis o cambios post embarazo.',
     highlights: ['Técnicas avanzadas', 'Resultados duraderos', 'Definición corporal 360'],
+    doctor: 'pablo-vega',
   },
   {
     slug: 'body-lifting',
@@ -34,6 +38,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Cirugía integral que redefine el contorno corporal trabajando múltiples zonas en una misma intervención.',
     highlights: ['Combinación de técnicas', 'Mayor definición corporal', 'Resultados armónicos'],
+    doctor: 'pablo-vega',
   },
   {
     slug: 'mommy-makeover',
@@ -42,6 +47,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Combina diferentes cirugías (abdomen, mamas, glúteos) para recuperar la figura post embarazo en una sola intervención.',
     highlights: ['Varias zonas en una cirugía', 'Recuperación unificada', 'Resultados armónicos'],
+    doctor: 'pablo-vega',
   },
   {
     slug: 'cirugia-mamaria',
@@ -50,6 +56,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Procedimientos para mejorar la forma, el tamaño, el volumen y la armonía de las mamas, adaptados a cada paciente.',
     highlights: ['Aumento mamario', 'Mastopexia', 'Recambio de implantes'],
+    doctor: 'pablo-vega',
   },
   {
     slug: 'cirugia-glutea',
@@ -58,6 +65,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Procedimientos para mejorar la forma, proyección y volumen de los glúteos con un contorno armónico y natural.',
     highlights: ['Implantes glúteos', 'Transferencia glútea', 'Resultados naturales'],
+    doctor: 'pablo-vega',
   },
   {
     slug: 'cirugia-facial',
@@ -66,6 +74,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Procedimientos para rejuvenecer y armonizar el rostro, mejorando la apariencia sin perder naturalidad.',
     highlights: ['Blefaroplastia', 'Lifting facial', 'Lifting de cejas'],
+    doctor: 'majo-arauz',
   },
   {
     slug: 'medicina-estetica',
@@ -74,6 +83,7 @@ export const LANDING_TREATMENTS: LandingTreatment[] = [
     description:
       'Tratamientos no quirúrgicos para mejorar la calidad de la piel, prevenir el envejecimiento y realzar la armonía facial.',
     highlights: ['Ácido hialurónico', 'Toxina botulínica', 'Bioestimuladores'],
+    doctor: 'majo-arauz',
   },
 ]
 

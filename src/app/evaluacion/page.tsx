@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Award,
   CheckCircle2,
+  ChevronDown,
   Clock,
   MapPin,
   MonitorSmartphone,
@@ -21,12 +22,26 @@ import { findLandingTreatment, LANDING_TREATMENTS } from '@/lib/landing'
 import { SITE_ADDRESS } from '@/lib/site'
 
 // Landing for Google Ads traffic: no site navigation, one goal (the form),
-// links to the main site only where they add trust.
-export const metadata: Metadata = {
-  title: 'Evaluación personalizada | DOMA Sculpt Center',
-  description:
-    'Cirugía plástica y medicina estética en Belgrano. Agendá tu evaluación personalizada con nuestro equipo médico.',
-  robots: { index: false, follow: true },
+// links to the main site only where they add trust. An ad group can deep-link
+// a treatment with ?tratamiento=<slug>: the headline, the form, the doctor
+// order and the WhatsApp message all follow it (message match).
+type Props = { searchParams: Promise<{ tratamiento?: string }> }
+
+const PHONE_DISPLAY = '+54 9 11 3025-3305'
+const PHONE_HREF = 'tel:+5491130253305'
+const RESPONSE_NOTE = 'Te contactamos dentro de las 24 horas hábiles.'
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const selected = findLandingTreatment((await searchParams).tratamiento)
+  return {
+    title: selected
+      ? `${selected.name} en Belgrano | DOMA Sculpt Center`
+      : 'Evaluación personalizada | DOMA Sculpt Center',
+    description: selected
+      ? `${selected.description} Agendá tu evaluación personalizada en DOMA Sculpt Center, Belgrano.`
+      : 'Cirugía plástica y medicina estética en Belgrano. Agendá tu evaluación personalizada con nuestro equipo médico.',
+    robots: { index: false, follow: true },
+  }
 }
 
 const doctors = [
@@ -45,6 +60,28 @@ const doctors = [
     image: '/images/team/majo-arauz.webp',
     summary: 'Especialista en rejuvenecimiento facial: cirugía facial y tratamientos de medicina estética.',
     slug: 'majo-arauz',
+  },
+]
+
+const trustItems = [
+  { icon: ShieldCheck, text: 'Cirujanos plásticos matriculados' },
+  { icon: Award, text: 'Sanatorios de alta complejidad' },
+  { icon: MonitorSmartphone, text: 'Consultas virtuales y presenciales' },
+  { icon: MapPin, text: 'Belgrano, CABA' },
+]
+
+const steps = [
+  {
+    title: 'Dejás tus datos',
+    text: 'Completás el formulario o nos escribís por WhatsApp. Lleva menos de un minuto.',
+  },
+  {
+    title: 'Evaluamos tu caso',
+    text: 'Coordinamos una consulta virtual o presencial con el especialista indicado para vos.',
+  },
+  {
+    title: 'Recibís tu plan',
+    text: 'Definimos el tratamiento adecuado y te acompañamos en todo el proceso.',
   },
 ]
 
@@ -81,22 +118,53 @@ const testimonials = [
   },
 ]
 
-export default async function EvaluacionPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ tratamiento?: string }>
-}) {
+const faqs = [
+  {
+    question: '¿La evaluación tiene costo?',
+    answer: 'No. La evaluación inicial es sin cargo: analizamos tu caso y te explicamos qué opciones tenés.',
+  },
+  {
+    question: '¿Puedo hacer la consulta de forma virtual?',
+    answer:
+      'Sí. Hacemos consultas virtuales y presenciales, así que podés empezar desde donde estés y venir al centro cuando haga falta.',
+  },
+  {
+    question: '¿Quién me va a atender?',
+    answer:
+      'El Dr. Pablo Vega (M.N. 170504), especialista en cirugía plástica y contorno corporal, o la Dra. Majo Arauz (M.N. 174190), especialista en cirugía facial y medicina estética, según el tratamiento.',
+  },
+  {
+    question: '¿Dónde se realizan las cirugías?',
+    answer: 'En sanatorios de alta complejidad, con el equipo y las condiciones de seguridad necesarias.',
+  },
+  {
+    question: '¿Cuánto cuesta el tratamiento?',
+    answer:
+      'Depende de cada caso. Por eso primero hacemos la evaluación: con eso definimos qué necesitás y te informamos el valor.',
+  },
+  {
+    question: '¿Qué pasa después de enviar el formulario?',
+    answer:
+      'Un asesor de DOMA se comunica con vos dentro de las 24 horas hábiles para coordinar la evaluación en el día y la modalidad que te queden mejor.',
+  },
+]
+
+export default async function EvaluacionPage({ searchParams }: Props) {
   const { tratamiento } = await searchParams
   const selected = findLandingTreatment(tratamiento)
   const whatsappMessage = selected
     ? `Hola, quiero consultar por ${selected.name}`
     : 'Hola, quiero agendar una evaluación'
+  const otherTreatments = LANDING_TREATMENTS.filter((treatment) => treatment.slug !== selected?.slug)
+  const orderedDoctors = selected
+    ? [...doctors].sort((a, b) => Number(b.slug === selected.doctor) - Number(a.slug === selected.doctor))
+    : doctors
 
   return (
     <div className="pb-24 lg:pb-0">
-      {/* Header: logo only, no navigation */}
+      {/* Header: logo and direct contact, no navigation */}
       <header className="absolute inset-x-0 top-0 z-20">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between gap-4">
           <Link href="/" aria-label="DOMA Sculpt Center">
             <Image
               src="/images/logos/DOMA_LOGO-DOMA-VIOLETA.svg"
@@ -107,6 +175,21 @@ export default async function EvaluacionPage({
               priority
             />
           </Link>
+          <div className="flex items-center gap-3">
+            <a
+              href={PHONE_HREF}
+              className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-white/90 hover:text-white"
+            >
+              <Phone className="w-4 h-4 text-doma-accent" />
+              {PHONE_DISPLAY}
+            </a>
+            <WhatsAppButton
+              message={whatsappMessage}
+              className="hidden sm:inline-flex rounded-full bg-white/10 border border-white/25 text-white text-sm font-bold px-4 py-2 hover:bg-white/20 transition-colors"
+            >
+              WhatsApp
+            </WhatsAppButton>
+          </div>
         </div>
       </header>
 
@@ -122,11 +205,20 @@ export default async function EvaluacionPage({
             <div className="space-y-7">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/90 text-xs font-bold uppercase tracking-widest">
                 <span className="w-2 h-2 rounded-full bg-doma-accent" />
-                {selected ? selected.name : 'Cirugía plástica y medicina estética'}
+                {selected ? 'DOMA Sculpt Center · Belgrano, CABA' : 'Cirugía plástica y medicina estética · Belgrano'}
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.05] tracking-tight">
-                Resultados naturales,{' '}
-                <span className="text-doma-accent">pensados para vos.</span>
+                {selected ? (
+                  <>
+                    {selected.name}:{' '}
+                    <span className="text-doma-accent">resultados naturales, pensados para vos.</span>
+                  </>
+                ) : (
+                  <>
+                    Resultados naturales,{' '}
+                    <span className="text-doma-accent">pensados para vos.</span>
+                  </>
+                )}
               </h1>
               <p className="text-lg text-white/75 max-w-lg leading-relaxed">
                 {selected
@@ -134,43 +226,116 @@ export default async function EvaluacionPage({
                   : 'Evaluamos tu caso y definimos el mejor camino para lograr el resultado que buscás, con un enfoque médico, tecnología avanzada y seguimiento personalizado.'}
               </p>
               <ul className="space-y-3">
-                {[
-                  'Evaluación médica personalizada',
-                  'Consultas virtuales y presenciales',
-                  'Cirujanos plásticos matriculados',
-                ].map((item) => (
+                {(selected
+                  ? selected.highlights
+                  : ['Evaluación médica personalizada', 'Consultas virtuales y presenciales', 'Cirujanos plásticos matriculados']
+                ).map((item) => (
                   <li key={item} className="flex items-center gap-3 text-white/85">
                     <CheckCircle2 className="w-5 h-5 text-doma-accent shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <div className="hidden lg:flex">
-                <WhatsAppButton
-                  message={whatsappMessage}
-                  className="btn-secondary !border-white/30 !text-white hover:!bg-white/10"
-                >
-                  Prefiero escribir por WhatsApp
-                </WhatsAppButton>
-              </div>
             </div>
 
             <div id="formulario" className="flex lg:justify-end scroll-mt-6">
               <div className="w-full max-w-md">
                 <ContactForm
+                  key={`top-${selected?.slug ?? 'general'}`}
                   medicoId="web-general"
                   idPrefix="landing"
                   compact
                   showEmail={false}
                   defaultProcedure={selected?.formValue}
+                  formSubtitle="Evaluación inicial sin cargo, virtual o presencial."
+                  footnote={RESPONSE_NOTE}
                 />
               </div>
             </div>
           </div>
         </section>
 
+        {/* Trust bar */}
+        <section className="bg-doma-dark border-t border-white/10">
+          <ul className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {trustItems.map((item) => (
+              <li key={item.text} className="flex items-center gap-2.5 text-sm font-semibold text-white/85">
+                <item.icon className="w-5 h-5 text-doma-accent shrink-0" />
+                {item.text}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* How it works */}
+        <section className="py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-6">
+            <h2 className="text-3xl lg:text-4xl font-black text-doma-dark text-center mb-12">
+              Cómo es el proceso
+            </h2>
+            <ol className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {steps.map((step, index) => (
+                <li key={step.title} className="rounded-3xl bg-surface p-8 border border-doma-light/40">
+                  <span className="text-4xl font-black text-doma-accent">0{index + 1}</span>
+                  <h3 className="mt-3 text-xl font-black text-doma-dark">{step.title}</h3>
+                  <p className="mt-2 text-doma-muted leading-relaxed">{step.text}</p>
+                </li>
+              ))}
+            </ol>
+            <div className="text-center mt-10">
+              <a href="#formulario" className="btn-primary">
+                Quiero mi evaluación
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Treatments (no photos: body images can limit ad delivery) */}
+        <section className="py-16 lg:py-20 bg-surface">
+          <div className="max-w-7xl mx-auto px-6">
+            {selected ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+                <div className="rounded-3xl bg-white p-8 lg:p-10 border border-doma-accent/40 shadow-lg">
+                  <p className="text-doma-accent font-bold text-xs uppercase tracking-widest mb-3">Tu consulta</p>
+                  <h2 className="text-3xl font-black text-doma-dark mb-4">{selected.name}</h2>
+                  <p className="text-doma-muted leading-relaxed mb-6">{selected.description}</p>
+                  <ul className="space-y-2.5 mb-8">
+                    {selected.highlights.map((highlight) => (
+                      <li key={highlight} className="flex items-center gap-2.5 text-doma-dark font-semibold">
+                        <CheckCircle2 className="w-5 h-5 text-doma-accent shrink-0" />
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="#formulario" className="btn-primary">
+                    Quiero mi evaluación
+                    <ArrowRight className="w-5 h-5" />
+                  </a>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-doma-dark mb-2">Otros tratamientos</h2>
+                  <p className="text-doma-muted mb-6">Si tu consulta es por otro tratamiento, elegilo acá.</p>
+                  <TreatmentLinks treatments={otherTreatments} />
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="text-center max-w-2xl mx-auto mb-10 space-y-4">
+                  <h2 className="text-3xl lg:text-4xl font-black text-doma-dark">¿Qué tratamiento te interesa?</h2>
+                  <p className="text-doma-muted text-lg">
+                    Elegí uno y lo dejamos seleccionado en el formulario. Si tenés dudas, te asesoramos en la
+                    evaluación.
+                  </p>
+                </div>
+                <TreatmentLinks treatments={otherTreatments} columns />
+              </>
+            )}
+          </div>
+        </section>
+
         {/* Why DOMA */}
-        <section className="py-20 bg-white">
+        <section className="py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
             {reasons.map((reason) => (
               <div key={reason.title} className="rounded-3xl bg-surface p-8 border border-doma-light/40">
@@ -182,55 +347,15 @@ export default async function EvaluacionPage({
           </div>
         </section>
 
-        {/* Treatments (no photos: body images can limit ad delivery) */}
-        <section className="py-20 bg-surface">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-12 space-y-4">
-              <h2 className="text-3xl lg:text-4xl font-black text-doma-dark">Tratamientos</h2>
-              <p className="text-doma-muted text-lg">
-                Cada tratamiento se diseña de forma personalizada, combinando tecnología de última
-                generación con la experiencia de nuestro equipo médico.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {LANDING_TREATMENTS.map((treatment) => (
-                <div
-                  key={treatment.slug}
-                  className={`rounded-3xl bg-white p-6 border flex flex-col ${
-                    treatment.slug === selected?.slug ? 'border-doma-accent shadow-lg' : 'border-doma-light/40'
-                  }`}
-                >
-                  <h3 className="text-lg font-black text-doma-dark mb-2">{treatment.name}</h3>
-                  <p className="text-sm text-doma-muted leading-relaxed mb-4">{treatment.description}</p>
-                  <ul className="mt-auto space-y-1.5">
-                    {treatment.highlights.map((highlight) => (
-                      <li key={highlight} className="flex items-center gap-2 text-sm text-doma-dark">
-                        <CheckCircle2 className="w-4 h-4 text-doma-accent shrink-0" />
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-10">
-              <a href="#formulario" className="btn-primary">
-                Quiero mi evaluación
-                <ArrowRight className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-        </section>
-
         {/* Team */}
-        <section className="py-20 bg-white">
+        <section className="py-16 lg:py-20 bg-surface">
           <div className="max-w-5xl mx-auto px-6">
             <h2 className="text-3xl lg:text-4xl font-black text-doma-dark text-center mb-12">
               Nuestro equipo médico
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {doctors.map((doctor) => (
-                <div key={doctor.slug} className="rounded-3xl overflow-hidden border border-doma-light/40 bg-surface">
+              {orderedDoctors.map((doctor) => (
+                <div key={doctor.slug} className="rounded-3xl overflow-hidden border border-doma-light/40 bg-white">
                   <div className="relative aspect-[4/3]">
                     <Image src={doctor.image} alt={doctor.name} fill className="object-cover object-top" />
                   </div>
@@ -257,14 +382,14 @@ export default async function EvaluacionPage({
         </section>
 
         {/* Testimonials */}
-        <section className="py-20 bg-surface">
+        <section className="py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-3xl lg:text-4xl font-black text-doma-dark text-center mb-12">
               Lo que dicen nuestras pacientes
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {testimonials.map((testimonial) => (
-                <figure key={testimonial.name} className="rounded-3xl bg-white p-8 border border-doma-light/40">
+                <figure key={testimonial.name} className="rounded-3xl bg-surface p-8 border border-doma-light/40">
                   <div className="flex gap-1 mb-4" aria-label="5 estrellas">
                     {Array.from({ length: 5 }).map((_, index) => (
                       <Star key={index} className="w-4 h-4 fill-doma-accent text-doma-accent" />
@@ -287,29 +412,66 @@ export default async function EvaluacionPage({
           </div>
         </section>
 
-        {/* Final CTA */}
-        <section className="py-20 bg-doma-dark">
-          <div className="max-w-3xl mx-auto px-6 text-center space-y-6">
-            <h2 className="text-3xl lg:text-4xl font-black text-white">
-              Empezá tu cambio con un equipo especializado
-            </h2>
-            <p className="text-white/70 text-lg">
-              Te acompañamos en todo el proceso, desde la evaluación hasta el resultado final, con
-              un enfoque personalizado y seguro.
-            </p>
-            <p className="inline-flex items-center gap-2 text-doma-accent font-bold">
-              <MonitorSmartphone className="w-5 h-5" />
-              Hacemos consultas virtuales y presenciales
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-              <a href="#formulario" className="btn-primary">
-                Agendar consulta
-                <ArrowRight className="w-5 h-5" />
-              </a>
-              <WhatsAppButton
-                message={whatsappMessage}
-                className="btn-secondary !border-white/30 !text-white hover:!bg-white/10"
-              />
+        {/* FAQ */}
+        <section className="py-16 lg:py-20 bg-surface">
+          <div className="max-w-3xl mx-auto px-6">
+            <h2 className="text-3xl lg:text-4xl font-black text-doma-dark text-center mb-10">Preguntas frecuentes</h2>
+            <div className="space-y-3">
+              {faqs.map((faq) => (
+                <details key={faq.question} className="group rounded-2xl bg-white border border-doma-light/40 px-6">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-bold text-doma-dark [&::-webkit-details-marker]:hidden">
+                    {faq.question}
+                    <ChevronDown className="w-5 h-5 shrink-0 text-doma-violet transition-transform group-open:rotate-180" />
+                  </summary>
+                  <p className="pb-5 text-doma-muted leading-relaxed">{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA with a second form */}
+        <section className="py-16 lg:py-20 bg-doma-dark">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 text-center lg:text-left">
+              <h2 className="text-3xl lg:text-4xl font-black text-white">
+                Empezá tu cambio con un equipo especializado
+              </h2>
+              <p className="text-white/70 text-lg">
+                Te acompañamos en todo el proceso, desde la evaluación hasta el resultado final, con un enfoque
+                personalizado y seguro.
+              </p>
+              <p className="inline-flex items-center gap-2 text-doma-accent font-bold">
+                <MonitorSmartphone className="w-5 h-5" />
+                Hacemos consultas virtuales y presenciales
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                <WhatsAppButton
+                  message={whatsappMessage}
+                  className="btn-secondary !border-white/30 !text-white hover:!bg-white/10"
+                />
+                <a
+                  href={PHONE_HREF}
+                  className="btn-secondary !border-white/30 !text-white hover:!bg-white/10 gap-2"
+                >
+                  <Phone className="w-5 h-5" />
+                  Llamar
+                </a>
+              </div>
+            </div>
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-full max-w-md">
+                <ContactForm
+                  key={`bottom-${selected?.slug ?? 'general'}`}
+                  medicoId="web-general"
+                  idPrefix="landing-bottom"
+                  compact
+                  showEmail={false}
+                  defaultProcedure={selected?.formValue}
+                  formSubtitle="Evaluación inicial sin cargo, virtual o presencial."
+                  footnote={RESPONSE_NOTE}
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -325,7 +487,9 @@ export default async function EvaluacionPage({
             </p>
             <p className="flex items-center gap-2">
               <Phone className="w-4 h-4 text-doma-accent" />
-              +54 9 11 3025-3305
+              <a href={PHONE_HREF} className="hover:text-white transition-colors">
+                {PHONE_DISPLAY}
+              </a>
             </p>
             <p className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-doma-accent" />
@@ -356,5 +520,34 @@ export default async function EvaluacionPage({
         </WhatsAppButton>
       </div>
     </div>
+  )
+}
+
+// Compact, clickable treatment list. Each link reloads the landing with that
+// treatment selected, which also preselects it in both forms.
+function TreatmentLinks({
+  treatments,
+  columns = false,
+}: {
+  treatments: typeof LANDING_TREATMENTS
+  columns?: boolean
+}) {
+  return (
+    <ul className={columns ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4' : 'grid grid-cols-1 sm:grid-cols-2 gap-3'}>
+      {treatments.map((treatment) => (
+        <li key={treatment.slug}>
+          <Link
+            href={`/evaluacion?tratamiento=${treatment.slug}#formulario`}
+            className="group flex h-full items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 border border-doma-light/40 hover:border-doma-accent hover:shadow-md transition-all"
+          >
+            <span>
+              <span className="block font-black text-doma-dark">{treatment.name}</span>
+              <span className="block text-sm text-doma-muted">{treatment.highlights.slice(0, 2).join(' · ')}</span>
+            </span>
+            <ArrowRight className="w-4 h-4 shrink-0 text-doma-violet group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </li>
+      ))}
+    </ul>
   )
 }
