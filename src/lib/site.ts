@@ -4,7 +4,7 @@ export const SITE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${
   `${SITE_ADDRESS}, Buenos Aires`
 )}`
 
-export const SITE_EMAIL = 'domasculpcenter@gmail.com'
+export const SITE_EMAIL = 'info@domasculptcenter.com'
 
 export const SITE_INSTAGRAM_URL = 'https://www.instagram.com/domasculptcenter/'
 export const SITE_INSTAGRAM_HANDLE = '@domasculptcenter'
