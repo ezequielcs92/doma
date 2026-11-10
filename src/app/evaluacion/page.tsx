@@ -236,6 +236,11 @@ export default async function EvaluacionPage({ searchParams }: Props) {
                   : 'Evaluamos tu caso y definimos el mejor camino para lograr el resultado que buscás, con un enfoque médico, tecnología avanzada y seguimiento personalizado.'}
               </p>
               </AnimatedSection>
+              {/* Mobile: the form sits below the fold, so give the first screen a direct way to it */}
+              <a href="#formulario" className="btn-primary lg:hidden">
+                Solicitar evaluación gratuita
+                <ArrowRight className="w-5 h-5" />
+              </a>
               <ul className="space-y-3">
                 {(selected
                   ? selected.highlights
